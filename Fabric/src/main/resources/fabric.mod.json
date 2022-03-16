@@ -1,40 +1,31 @@
 {
-    "schemaVersion": 1,
-    "id": "modid",
-    "version": "${version}",
+  "schemaVersion": 1,
+  "id": "ironchests",
+  "version": "${version}",
+
+  "name": "Iron Chests: Restocked",
+  "description": "Iron Chests because why not",
+  "authors": [
+    "ThatGravyBoat"
+  ],
+  "license": "All Rights Reserved",
+  "icon": "assets/ironchests/icon.png",
   
-    "name": "Example Mod",
-    "description": "This is an example description! Tell everyone what your mod is about!",
-    "authors": [
-      "Me!"
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "tech.thatgravyboat.ironchests.FabricIronChests"
     ],
-    "contact": {
-      "homepage": "https://fabricmc.net/",
-      "sources": "https://github.com/FabricMC/fabric-example-mod"
-    },
+    "client": [
+      "tech.thatgravyboat.ironchests.FabricIronChestsClient"
+    ]
+  },
   
-    "license": "CC0-1.0",
-    "icon": "assets/modid/icon.png",
-  
-    "environment": "*",
-    "entrypoints": {
-      "main": [
-        "com.example.examplemod.ExampleMod"
-      ]
-    },
-    "mixins": [
-      "multiloader.mixins.json",
-      "multiloader.fabric.mixins.json"
-    ],
-  
-    "depends": {
-      "fabricloader": ">=0.12",
-      "fabric": "*",
-      "minecraft": "1.18.x",
-      "java": ">=17"
-    },
-    "suggests": {
-      "another-mod": "*"
-    }
+  "depends": {
+    "fabricloader": ">=0.12",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "java": ">=17"
   }
+}
   

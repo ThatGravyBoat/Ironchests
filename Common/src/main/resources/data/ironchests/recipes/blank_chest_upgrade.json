@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#F#",
+    "###"
+  ],
+  "key": {
+    "#": {"tag": "minecraft:planks"},
+    "F": {"item": "minecraft:flint"}
+  },
+  "result": {
+    "item": "ironchests:blank_chest_upgrade"
+  }
+}

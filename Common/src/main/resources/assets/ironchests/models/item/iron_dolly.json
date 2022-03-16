@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "ironchests:item/iron_dolly"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "ironchests:dolly_filled": 1
+      },
+      "model": "ironchests:item/iron_dolly_filled"
+    }
+  ]
+}

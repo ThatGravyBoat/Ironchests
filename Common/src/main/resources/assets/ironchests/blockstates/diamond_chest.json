@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "ironchests:block/chests/diamond_chest"
+    }
+  }
+}

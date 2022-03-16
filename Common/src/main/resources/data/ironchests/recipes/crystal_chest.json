@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "SCS",
+    "###"
+  ],
+  "key": {
+    "#": {"item": "minecraft:glass"},
+    "S": {"item": "minecraft:amethyst_shard"},
+    "C": {"item": "ironchests:diamond_chest"}
+  },
+  "result": {
+    "item": "ironchests:crystal_chest"
+  }
+}

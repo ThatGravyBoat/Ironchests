@@ -1,0 +1,7 @@
+{
+  "parent": "ironchests:block/chest_full",
+  "textures": {
+    "texture": "ironchests:block/chests/crystal",
+    "particle": "minecraft:block/amethyst_block"
+  }
+}
