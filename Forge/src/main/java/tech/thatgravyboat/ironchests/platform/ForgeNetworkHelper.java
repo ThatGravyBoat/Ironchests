@@ -7,6 +7,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -36,14 +37,20 @@ public class ForgeNetworkHelper implements INetworkHelper {
         clientOnlyRegister(handler, tClass);
     }
 
-    @OnlyIn(Dist.CLIENT)
     private static <T> void clientOnlyRegister(IPacketHandler<T> handler, Class<T> tClass) {
         INSTANCE.registerMessage(++id, tClass, handler::encode, handler::decode, (t, context) -> {
-            Player sender = Minecraft.getInstance().player;
+            Player sender = context.get().getDirection().getReceptionSide().equals(LogicalSide.CLIENT) ? getPlayer() : null;
             if(sender != null) {
-                context.get().enqueueWork(() -> handler.handle(t).accept(Minecraft.getInstance(), sender));
+                context.get().enqueueWork(() -> handler.handle(t).accept(sender));
             }
             context.get().setPacketHandled(true);
         });
     }
+
+    @OnlyIn(Dist.CLIENT)
+    private static Player getPlayer() {
+        return Minecraft.getInstance().player;
+    }
+
+
 }

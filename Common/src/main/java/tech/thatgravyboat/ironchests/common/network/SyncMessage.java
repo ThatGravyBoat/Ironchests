@@ -1,6 +1,5 @@
 package tech.thatgravyboat.ironchests.common.network;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -12,7 +11,7 @@ import tech.thatgravyboat.ironchests.common.blocks.ISyncableData;
 import tech.thatgravyboat.ironchests.common.network.handlers.IPacket;
 import tech.thatgravyboat.ironchests.common.network.handlers.IPacketHandler;
 
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public record SyncMessage(BlockPos pos, CompoundTag tag) implements IPacket<SyncMessage> {
 
@@ -43,8 +42,8 @@ public record SyncMessage(BlockPos pos, CompoundTag tag) implements IPacket<Sync
         }
 
         @Override
-        public BiConsumer<Minecraft, Player> handle(SyncMessage message) {
-            return (server, player) -> {
+        public Consumer<Player> handle(SyncMessage message) {
+            return (player) -> {
                 if (player != null && player.level.isLoaded(message.pos)) {
                     BlockEntity blockEntity = player.level.getBlockEntity(message.pos);
                     if (blockEntity instanceof ISyncableData syncableData)

@@ -28,7 +28,7 @@ public interface IClientHelper {
     <H extends AbstractContainerMenu, S extends Screen & MenuAccess<H>> void registerScreen(MenuType<H> type, Factory<H, S> factory);
 
     @FunctionalInterface
-    public interface Factory<H extends AbstractContainerMenu, S extends Screen & MenuAccess<H>> {
+    interface Factory<H extends AbstractContainerMenu, S extends Screen & MenuAccess<H>> {
         @NotNull S create(H handler, Inventory inventory, Component title);
     }
 }

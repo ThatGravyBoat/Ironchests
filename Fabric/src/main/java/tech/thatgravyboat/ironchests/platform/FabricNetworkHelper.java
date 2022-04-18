@@ -5,6 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -29,14 +30,15 @@ public class FabricNetworkHelper implements INetworkHelper {
 
     @Override
     public <T> void registerServerToClientPacket(ResourceLocation location, IPacketHandler<T> handler, Class<T> tClass) {
-        clientOnlyRegister(location, handler);
+        if (FabricLoader.getInstance().getEnvironmentType().equals(EnvType.CLIENT))
+            clientOnlyRegister(location, handler);
     }
 
     @Environment(EnvType.CLIENT)
     private static <T> void clientOnlyRegister(ResourceLocation location, IPacketHandler<T> handler) {
         ClientPlayNetworking.registerGlobalReceiver(location, (client, handler1, buf, responseSender) -> {
             var decode = handler.decode(buf);
-            client.execute(() -> handler.handle(decode).accept(client, client.player));
+            client.execute(() -> handler.handle(decode).accept(client.player));
         });
     }
 }

@@ -23,7 +23,7 @@ import tech.thatgravyboat.ironchests.common.blocks.GenericChestBlock;
 import tech.thatgravyboat.ironchests.common.blocks.GenericChestBlockEntity;
 import tech.thatgravyboat.ironchests.common.blocks.LockState;
 import tech.thatgravyboat.ironchests.common.chesttypes.ChestType;
-import tech.thatgravyboat.ironchests.platform.Services;
+import tech.thatgravyboat.ironchests.platform.ClientServices;
 
 import java.util.Locale;
 
@@ -77,17 +77,17 @@ public class ChestRenderer<T extends GenericChestBlockEntity> implements BlockEn
 
     private void initModels(BlockRenderDispatcher dispatcher) {
         if (base == null)
-            base = Services.MODEL.loadModel(dispatcher, new ResourceLocation(Constants.MODID, "block/chests/"+ type.name().toLowerCase(Locale.ROOT) +"_chest_base"));
+            base = ClientServices.MODEL.loadModel(dispatcher, new ResourceLocation(Constants.MODID, "block/chests/"+ type.name().toLowerCase(Locale.ROOT) +"_chest_base"));
         if (lid == null)
-            lid = Services.MODEL.loadModel(dispatcher, new ResourceLocation(Constants.MODID, "block/chests/"+ type.name().toLowerCase(Locale.ROOT) +"_chest_lid"));
+            lid = ClientServices.MODEL.loadModel(dispatcher, new ResourceLocation(Constants.MODID, "block/chests/"+ type.name().toLowerCase(Locale.ROOT) +"_chest_lid"));
         checkAndUpdateLocks(dispatcher);
     }
 
     private static void checkAndUpdateLocks(BlockRenderDispatcher dispatcher) {
         if (lockUnlocked == null)
-            ChestRenderer.lockUnlocked = Services.MODEL.loadModel(dispatcher, new ResourceLocation(Constants.MODID, "block/unlocked"));
+            ChestRenderer.lockUnlocked = ClientServices.MODEL.loadModel(dispatcher, new ResourceLocation(Constants.MODID, "block/unlocked"));
         if (lockLocked == null)
-            ChestRenderer.lockLocked = Services.MODEL.loadModel(dispatcher, new ResourceLocation(Constants.MODID, "block/locked"));
+            ChestRenderer.lockLocked = ClientServices.MODEL.loadModel(dispatcher, new ResourceLocation(Constants.MODID, "block/locked"));
     }
 
     private void renderItems(PoseStack poseStack, GenericChestBlockEntity blockEntity, float tickDelta, MultiBufferSource vertexConsumers, int light, int overlay) {

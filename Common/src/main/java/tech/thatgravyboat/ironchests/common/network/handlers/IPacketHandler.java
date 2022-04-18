@@ -1,10 +1,9 @@
 package tech.thatgravyboat.ironchests.common.network.handlers;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public interface IPacketHandler<T> {
 
@@ -12,5 +11,5 @@ public interface IPacketHandler<T> {
 
     T decode(FriendlyByteBuf buffer);
 
-    BiConsumer<Minecraft, Player> handle(T message);
+    Consumer<Player> handle(T message);
 }
