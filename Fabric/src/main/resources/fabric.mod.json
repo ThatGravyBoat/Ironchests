@@ -4,9 +4,10 @@
   "version": "${version}",
 
   "name": "Iron Chests: Restocked",
-  "description": "Iron Chests because why not",
+  "description": "Another Iron Chest Mod cause why not?",
   "authors": [
-    "ThatGravyBoat"
+    "Dev and Upgrade Textures - ThatGravyBoat",
+    "All Other Textures - Kekie"
   ],
   "license": "All Rights Reserved",
   "icon": "assets/ironchests/icon.png",

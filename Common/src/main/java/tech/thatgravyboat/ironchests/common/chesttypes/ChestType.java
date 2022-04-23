@@ -30,7 +30,6 @@ public record ChestType(String name, int length, int rows, int size,
         private int menuOffset;
         private int width;
         private int height;
-        private ChestRegistries registries;
         private BlockBehaviour.Properties properties;
         private boolean transparent;
         private String texture;
@@ -53,11 +52,6 @@ public record ChestType(String name, int length, int rows, int size,
         public Builder setDimensions(int width, int height){
             this.width = width;
             this.height = height;
-            return this;
-        }
-
-        public Builder setRegistries(ChestRegistries registries){
-            this.registries = registries;
             return this;
         }
 
@@ -87,7 +81,7 @@ public record ChestType(String name, int length, int rows, int size,
         }
 
         public ChestType build(){
-            return new ChestType(name, length, rows, length*rows, invOffset, menuOffset, width, height, properties, registries, transparent, texture, predicate, renderItems);
+            return new ChestType(name, length, rows, length*rows, invOffset, menuOffset, width, height, properties, new ChestRegistries(), transparent, texture, predicate, renderItems);
         }
     }
 }

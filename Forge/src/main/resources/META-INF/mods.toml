@@ -1,18 +1,18 @@
 modLoader="javafml"
-loaderVersion="[38,)"
+loaderVersion="[40,)"
 license="All rights reserved"
 
 [[mods]]
     modId="ironchests"
     version="${file.jarVersion}"
     displayName="Iron Chests: Restocked"
-    authors="ThatGravyBoat"
+    authors="Dev and Upgrade Textures - ThatGravyBoat, All Other Textures - Kekie"
     description="Another Iron Chest Mod cause why not?"
 
 [[dependencies.multiloader]]
     modId="forge"
     mandatory=true
-    versionRange="[38,)"
+    versionRange="[40,)"
     ordering="NONE"
     side="BOTH"
 
