@@ -15,7 +15,7 @@ public class ChestUpgradeTypes {
     private static final ChestUpgradeType DIAMOND_TO_CRYSTAL = register(ChestTypes.DIAMOND, ChestTypes.CRYSTAL);
     private static final ChestUpgradeType DIAMOND_TO_NETHERITE = register(ChestTypes.DIAMOND, ChestTypes.NETHERITE);
 
-    private static ChestUpgradeType register(ChestType from, ChestType to) {
+    public static ChestUpgradeType register(ChestType from, ChestType to) {
         var chestUpgradeType = new ChestUpgradeType(from, to);
         UPGRADES.add(chestUpgradeType);
         return chestUpgradeType;
