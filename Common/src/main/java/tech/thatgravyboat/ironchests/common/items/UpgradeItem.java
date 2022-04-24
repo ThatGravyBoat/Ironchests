@@ -2,20 +2,27 @@ package tech.thatgravyboat.ironchests.common.items;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import tech.thatgravyboat.ironchests.Constants;
 import tech.thatgravyboat.ironchests.common.blocks.GenericChestBlockEntity;
 import tech.thatgravyboat.ironchests.common.chesttypes.ChestUpgradeType;
 
 public class UpgradeItem extends Item {
+
+    public static final TagKey<Block> REPLACEABLE_CHEST_TAG = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(Constants.MODID, "upgradeable_wooden_chests"));
 
     public final ChestUpgradeType type;
 
@@ -61,9 +68,12 @@ public class UpgradeItem extends Item {
             return InteractionResult.CONSUME;
         }
 
+        BlockState state = level.getBlockState(pos);
+
         if (blockEntity instanceof ChestBlockEntity chestEntity){
 
             if (ChestBlockEntity.getOpenCount(level, pos) > 0) return InteractionResult.PASS;
+            if (!state.is(REPLACEABLE_CHEST_TAG)) return InteractionResult.PASS;
             if (type.from() != null) return InteractionResult.PASS;
             if (!chestEntity.canOpen(context.getPlayer())) return InteractionResult.PASS;
             if (level.isClientSide) return InteractionResult.SUCCESS;
