@@ -1,0 +1,24 @@
+modLoader="javafml"
+loaderVersion="[40,)"
+license="All rights reserved"
+
+[[mods]]
+    modId="ironchests"
+    version="${version}"
+    displayName="Iron Chests: Restocked"
+    authors="Dev and Upgrade Textures - ThatGravyBoat, All Other Textures - Kekie"
+    description="Another Iron Chest Mod cause why not?"
+
+[[dependencies.ironchests]]
+    modId="forge"
+    mandatory=true
+    versionRange="[40,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.ironchests]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.18,1.19)"
+    ordering="NONE"
+    side="BOTH"

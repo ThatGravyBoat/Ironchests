@@ -1,0 +1,6 @@
+{
+  "parent": "ironchests:block/chest_lid",
+  "textures": {
+    "texture": "ironchests:block/chests/copper"
+  }
+}

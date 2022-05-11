@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    "#  ",
+    "B##"
+  ],
+  "key": {
+    "#": {"item": "minecraft:diamond"},
+    "B": {"item": "minecraft:slime_ball"}
+  },
+  "result": {
+    "item": "ironchests:diamond_dolly"
+  }
+}

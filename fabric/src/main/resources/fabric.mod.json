@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "ironchests",
+  "version": "${version}",
+
+  "name": "Iron Chests: Restocked",
+  "description": "Another Iron Chest Mod cause why not?",
+  "authors": [
+    "Dev and Upgrade Textures - ThatGravyBoat",
+    "All Other Textures - Kekie"
+  ],
+  "license": "All Rights Reserved",
+  "icon": "assets/ironchests/icon.png",
+  
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "tech.thatgravyboat.ironchests.fabric.IronChestsFabric"
+    ],
+    "client": [
+      "tech.thatgravyboat.ironchests.client.fabric.IronChestsFabricClient"
+    ]
+  },
+  
+  "depends": {
+    "fabricloader": ">=0.12",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "java": ">=17"
+  }
+}
+  

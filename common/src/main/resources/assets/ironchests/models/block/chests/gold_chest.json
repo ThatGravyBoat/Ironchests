@@ -1,0 +1,7 @@
+{
+  "parent": "ironchests:block/chest_full",
+  "textures": {
+    "texture": "ironchests:block/chests/gold",
+    "particle": "minecraft:block/gold_block"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "ironchests:block/chest_base",
+  "textures": {
+    "texture": "ironchests:block/chests/diamond"
+  }
+}

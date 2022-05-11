@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GGG",
+    "#B#",
+    "GGG"
+  ],
+  "key": {
+    "#": {"item": "minecraft:diamond"},
+    "G": {"item": "minecraft:gold_ingot"},
+    "B": {"item": "ironchests:blank_chest_upgrade"}
+  },
+  "result": {
+    "item": "ironchests:diamond_chest_upgrade"
+  }
+}
