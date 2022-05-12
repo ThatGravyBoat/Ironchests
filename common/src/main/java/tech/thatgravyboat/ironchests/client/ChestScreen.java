@@ -39,7 +39,11 @@ public class ChestScreen extends AbstractContainerScreen<GenericChestMenu> {
         int x = (this.width - this.imageWidth) / 2;
         int y = (this.height - this.imageHeight) / 2;
 
-        this.blit(poseStack, x, y, 0, 0, this.imageWidth, this.imageHeight);
+        int width = (int) Math.max(256, Math.ceil(this.imageWidth / 256f) * 256);
+        int height = (int) Math.max(256, Math.ceil(this.imageHeight / 256f) * 256);
+        int size = Math.max(width, height);
+
+        blit(poseStack, x, y, 0, 0, this.imageWidth, this.imageHeight, size, size);
     }
 }
 
