@@ -5,8 +5,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
@@ -14,22 +12,18 @@ import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.ChestBlock;
 import org.jetbrains.annotations.NotNull;
 import tech.thatgravyboat.ironchests.IronChests;
+import tech.thatgravyboat.ironchests.api.chesttype.ChestType;
 import tech.thatgravyboat.ironchests.common.blocks.GenericChestBlock;
 import tech.thatgravyboat.ironchests.common.blocks.GenericChestBlockEntity;
 import tech.thatgravyboat.ironchests.common.blocks.LockState;
-import tech.thatgravyboat.ironchests.api.chesttype.ChestType;
-import tech.thatgravyboat.ironchests.common.utils.ModUtils;
 
 import java.util.Locale;
 
@@ -48,6 +42,8 @@ public class ChestRenderer<T extends GenericChestBlockEntity> implements BlockEn
 
     @Override
     public void render(@NotNull T chest, float f, @NotNull PoseStack poseStack, @NotNull MultiBufferSource multiBufferSource, int i, int j) {
+        ProfilerFiller profiler = Minecraft.getInstance().getProfiler();
+        profiler.push("ironchestRenderer");
         BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
         initModels(blockRenderer);
 
@@ -76,9 +72,12 @@ public class ChestRenderer<T extends GenericChestBlockEntity> implements BlockEn
             blockRenderer.getModelRenderer().renderModel(poseStack.last(), multiBufferSource.getBuffer(RenderType.cutout()), null, lockUnlocked, 1.0F, 1.0F, 1.0F, i, j);
         }
 
+        profiler.push("renderItems");
         if (type.renderItems() && (Minecraft.getInstance().options.graphicsMode.equals(GraphicsStatus.FABULOUS) || chest.getOpenness(f) > 0f)) renderItems(poseStack, chest, f, multiBufferSource, i, j);
+        profiler.pop();
 
         poseStack.popPose();
+        profiler.pop();
     }
 
     private void initModels(BlockRenderDispatcher dispatcher) {
