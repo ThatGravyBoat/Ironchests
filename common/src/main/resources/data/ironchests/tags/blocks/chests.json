@@ -1,13 +1,13 @@
 {
   "replace": false,
   "values" : [
-    "ironchests:dirt_chest",
-    "ironchests:copper_chest",
-    "ironchests:iron_chest",
-    "ironchests:gold_chest",
-    "ironchests:diamond_chest",
-    "ironchests:obsidian_chest",
-    "ironchests:crystal_chest",
-    "ironchests:netherite_chest"
+    {"required": false, "id": "ironchests:dirt_chest" },
+    {"required": false, "id": "ironchests:copper_chest" },
+    {"required": false, "id": "ironchests:iron_chest" },
+    {"required": false, "id": "ironchests:gold_chest" },
+    {"required": false, "id": "ironchests:diamond_chest" },
+    {"required": false, "id": "ironchests:obsidian_chest" },
+    {"required": false, "id": "ironchests:crystal_chest" },
+    {"required": false, "id": "ironchests:netherite_chest" }
   ]
 }
