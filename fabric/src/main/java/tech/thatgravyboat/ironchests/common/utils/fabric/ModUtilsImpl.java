@@ -6,6 +6,7 @@ import net.fabricmc.loader.api.ModContainer;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ModUtilsImpl {
     public static Path getConfigDirectory() {
@@ -13,6 +14,8 @@ public class ModUtilsImpl {
     }
 
     public static List<Path> getModFilePath(String modid) {
-        return FabricLoader.getInstance().getModContainer(modid).map(ModContainer::getRootPaths).orElse(new ArrayList<>());
+        Optional<ModContainer> container = FabricLoader.getInstance().getModContainer(modid);
+        if (container.isEmpty()) return new ArrayList<>();
+        return container.get().getOrigin().getPaths();
     }
 }

@@ -92,6 +92,13 @@ public class FileUtils {
     }
 
     public static void setupDefaultFiles(String dataPath, Path targetPath) {
+        List<Path> roots = ModUtils.getModFilePath(IronChests.MODID);
+        LOGGER.info("[Iron Chests] Pulling defaults from: " + roots);
+
+        if (roots.isEmpty()) {
+            throw new RuntimeException("Failed to load defaults.");
+        }
+
         for (Path modRoot : ModUtils.getModFilePath(IronChests.MODID)) {
             setupDefaultFiles(dataPath, targetPath, modRoot);
         }
