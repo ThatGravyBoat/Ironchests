@@ -2,7 +2,7 @@ package tech.thatgravyboat.ironchests.common.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
@@ -62,7 +62,7 @@ public class GenericChestBlock extends BaseEntityBlock implements SimpleWaterlog
             player.openMenu(menu);
         }
         if (!state.getValue(LOCK).canOpen()){
-            player.displayClientMessage(new TranslatableComponent("container.isLocked", this.getName()), true);
+            player.displayClientMessage(Component.translatable("container.isLocked", this.getName()), true);
             player.playNotifySound(SoundEvents.CHEST_LOCKED, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
 

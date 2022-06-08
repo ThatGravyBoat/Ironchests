@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -75,8 +74,8 @@ public class KeyItem extends Item {
             if (tag.contains("chest") && tag.contains("chestType")){
                 BlockPos pos = NbtUtils.readBlockPos(tag.getCompound("chest"));
                 MutableComponent chestType = Component.Serializer.fromJson(tag.getString("chestType"));
-                if (chestType != null) list.add(new TranslatableComponent("item.key.chesttype").append(chestType));
-                list.add(new TranslatableComponent("item.key.chestpos", pos.getX(), pos.getY(), pos.getZ()));
+                if (chestType != null) list.add(Component.translatable("item.key.chesttype").append(chestType));
+                list.add(Component.translatable("item.key.chestpos", pos.getX(), pos.getY(), pos.getZ()));
             }
         });
         super.appendHoverText(stack, level, list, tooltipFlag);

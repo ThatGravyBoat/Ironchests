@@ -5,7 +5,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
@@ -130,7 +129,7 @@ public class DollyItem extends Item {
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> list, @NotNull TooltipFlag tooltipFlag) {
         if (hasChest(stack)){
             String id = stack.getOrCreateTag().getCompound("BlockStateTag").getString("Name");
-            list.add(new TranslatableComponent("item.dolly.chestid", id));
+            list.add(Component.translatable("item.dolly.chestid", id));
         }
         super.appendHoverText(stack, level, list, tooltipFlag);
     }

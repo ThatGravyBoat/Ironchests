@@ -25,7 +25,7 @@ public record BuilderProperty(Material material, int lightLevel, boolean noColli
         properties.lightLevel(state -> lightLevel());
         if (noCollision) properties.noCollission();
         if (noOcclusion) properties.noOcclusion();
-        if (noDrops) properties.noDrops();
+        if (noDrops) properties.noLootTable();
         if (requiresCorrectToolForDrops) properties.requiresCorrectToolForDrops();
         properties.friction(friction());
         properties.speedFactor(speedFactor());

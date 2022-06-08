@@ -74,7 +74,7 @@ public class ChestRenderer<T extends GenericChestBlockEntity> implements BlockEn
         }
 
         profiler.push("renderItems");
-        if (type.renderItems() && (Minecraft.getInstance().options.graphicsMode.equals(GraphicsStatus.FABULOUS) || chest.getOpenness(f) > 0f)) renderItems(poseStack, chest, f, multiBufferSource, i, OverlayTexture.NO_OVERLAY);
+        if (type.renderItems() && (Minecraft.getInstance().options.graphicsMode().get().equals(GraphicsStatus.FABULOUS) || chest.getOpenness(f) > 0f)) renderItems(poseStack, chest, f, multiBufferSource, i, OverlayTexture.NO_OVERLAY);
         profiler.pop();
 
         poseStack.popPose();
