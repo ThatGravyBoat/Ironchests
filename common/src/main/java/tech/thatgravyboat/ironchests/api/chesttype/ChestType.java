@@ -19,7 +19,7 @@ public record ChestType(String name, int length, int rows, int size,
                         ChestRegistries registries,
                         boolean transparent, String texture,
                         ItemPredicate predicate,
-                        boolean renderItems) {
+                        boolean renderItems, boolean fireResistant) {
 
     public ChestType(String name,
                      int length, int rows,
@@ -27,8 +27,8 @@ public record ChestType(String name, int length, int rows, int size,
                      int width, int height,
                      IBlockProperty properties,
                      boolean transparent,
-                     String texture, ItemPredicate slotPredicate, boolean renderItems) {
-        this(name, length, rows, length * rows, inventoryOffset, menuOffset, width, height, properties, new ChestRegistries(), transparent, texture, slotPredicate, renderItems);
+                     String texture, ItemPredicate slotPredicate, boolean renderItems, boolean fireResistant) {
+        this(name, length, rows, length * rows, inventoryOffset, menuOffset, width, height, properties, new ChestRegistries(), transparent, texture, slotPredicate, renderItems, fireResistant);
     }
 
     public ChestType {
@@ -50,7 +50,8 @@ public record ChestType(String name, int length, int rows, int size,
                 Codec.BOOL.fieldOf("transparent").orElse(false).forGetter(ChestType::transparent),
                 Codec.STRING.fieldOf("texture").orElse(name).forGetter(ChestType::texture),
                 CodecUtils.passthrough(ItemPredicate::serializeToJson, ItemPredicate::fromJson).fieldOf("predicate").orElse(ItemPredicate.ANY).forGetter(ChestType::predicate),
-                Codec.BOOL.fieldOf("renderItems").orElse(false).forGetter(ChestType::renderItems)
+                Codec.BOOL.fieldOf("renderItems").orElse(false).forGetter(ChestType::renderItems),
+                Codec.BOOL.fieldOf("fireResistant").orElse(false).forGetter(ChestType::fireResistant)
         ).apply(instance, ChestType::new));
     }
 

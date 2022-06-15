@@ -34,7 +34,15 @@ public class ItemRegistry {
     }
 
     private static void registerChest(String id, ChestType type) {
-        register(id, () -> new BlockItem(type.registries().getBlock().get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
+        register(id, () -> new BlockItem(type.registries().getBlock().get(), getProps(type)));
+    }
+
+    private static Item.Properties getProps(ChestType type) {
+        Item.Properties properties = new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS);
+        if (type.fireResistant()) {
+            properties = properties.fireResistant();
+        }
+        return properties;
     }
 
     private static void registerUpgrade(ChestUpgradeType type) {

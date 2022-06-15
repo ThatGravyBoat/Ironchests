@@ -71,7 +71,7 @@ public class DollyItem extends Item {
 
         if (!state.is(NONPICKABLE_CHEST_TAG) && !hasChest(stack) && ((blockEntity instanceof GenericChestBlockEntity chest && chest.viewers() == 0) || (blockEntity instanceof ChestBlockEntity && ChestBlockEntity.getOpenCount(level, pos) == 0))){
             stack.getOrCreateTag().put("BlockStateTag", NbtUtils.writeBlockState(state));
-            stack.getOrCreateTag().put("BlockEntityTag", blockEntity.saveWithFullMetadata());
+            stack.getOrCreateTag().put("BlockEntityTag", blockEntity.saveWithId());
             level.removeBlockEntity(pos);
             //This is a hack because for some reason forge doesn't remove the block entity right away while on fabric it does?
             if (blockEntity instanceof GenericChestBlockEntity chest) {
