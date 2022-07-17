@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 public class MenuRegistryImpl {
 
-    public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, IronChests.MODID);
+    public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, IronChests.MODID);
 
     public static <E extends AbstractContainerMenu> Supplier<MenuType<E>> registerMenu(String id, MenuRegistry.MenuFactory<E> item) {
         return MENU_TYPES.register(id, () -> IForgeMenuType.create((syncId, inv, c) -> item.create(syncId, inv)));

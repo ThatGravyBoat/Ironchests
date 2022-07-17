@@ -1,8 +1,7 @@
 package tech.thatgravyboat.ironchests.client.forge;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ForgeModelBakery;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import tech.thatgravyboat.ironchests.IronChests;
@@ -19,12 +18,12 @@ public class IronChestsForgeClient {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(IronChestsForgeClient::onModelLoading);
     }
 
-    public static void onModelLoading(ModelRegistryEvent event) {
-        ForgeModelBakery.addSpecialModel(new ResourceLocation(IronChests.MODID, "block/locked"));
-        ForgeModelBakery.addSpecialModel(new ResourceLocation(IronChests.MODID, "block/unlocked"));
+    public static void onModelLoading(ModelEvent.RegisterAdditional event) {
+        event.register(new ResourceLocation(IronChests.MODID, "block/locked"));
+        event.register(new ResourceLocation(IronChests.MODID, "block/unlocked"));
         for (ChestType value : ChestTypeRegistry.INSTANCE.getChests().values()) {
-            ForgeModelBakery.addSpecialModel(new ResourceLocation(IronChests.MODID, "block/chests/"+ value.name().toLowerCase(Locale.ROOT) +"_chest_lid"));
-            ForgeModelBakery.addSpecialModel(new ResourceLocation(IronChests.MODID, "block/chests/"+ value.name().toLowerCase(Locale.ROOT) +"_chest_base"));
+            event.register(new ResourceLocation(IronChests.MODID, "block/chests/"+ value.name().toLowerCase(Locale.ROOT) +"_chest_lid"));
+            event.register(new ResourceLocation(IronChests.MODID, "block/chests/"+ value.name().toLowerCase(Locale.ROOT) +"_chest_base"));
         }
     }
 
