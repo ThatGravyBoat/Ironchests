@@ -13,6 +13,7 @@ import tech.thatgravyboat.ironchests.common.utils.ModPaths;
 
 import java.io.File;
 import java.io.Reader;
+import java.util.Objects;
 
 public class ChestTypeLoader {
 
@@ -27,6 +28,17 @@ public class ChestTypeLoader {
         }
         FileUtils.streamFilesAndParse(ModPaths.CHESTS, ChestTypeLoader::parseChest, "Could not stream chests!");
         FileUtils.streamFilesAndParse(ModPaths.UPGRADE_TYPES, ChestTypeLoader::parseChestUpgrade, "Could not stream chest upgrades!");
+        runChestChecks();
+    }
+
+    private static void runChestChecks() {
+        // Checks if oxidized chest exists.
+        ChestTypeRegistry.INSTANCE.getChests()
+                .values()
+                .stream()
+                .map(ChestType::oxidizedChest)
+                .filter(Objects::nonNull)
+                .forEach(ChestUpgradeType::get);
     }
 
     private static void parseChest(Reader reader, String name) {

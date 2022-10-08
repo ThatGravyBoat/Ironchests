@@ -3,6 +3,7 @@ package tech.thatgravyboat.ironchests.common.blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
@@ -34,7 +35,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tech.thatgravyboat.ironchests.api.chesttype.ChestType;
+import tech.thatgravyboat.ironchests.common.items.UpgradeItem;
 import tech.thatgravyboat.ironchests.common.registry.minecraft.ItemRegistry;
+
+import java.util.Random;
 
 @SuppressWarnings("deprecation")
 public class GenericChestBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
@@ -158,5 +162,21 @@ public class GenericChestBlock extends BaseEntityBlock implements SimpleWaterlog
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState blockState, @NotNull BlockEntityType<T> blockEntityType) {
         return level.isClientSide ? createTickerHelper(blockEntityType, this.type.registries().getBlockEntity().get(), GenericChestBlockEntity::lidAnimateTick) : null;
+    }
+
+    @Override
+    public void randomTick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull Random random) {
+        if (level.random.nextFloat() > 0.05f) return;
+        if (level.getBlockEntity(pos) instanceof GenericChestBlockEntity chest) {
+            ChestType newChest = chest.getChestType().getOxidizedChest();
+            if (newChest != null){
+                UpgradeItem.changeToChest(level, pos, chest, newChest);
+            }
+        }
+    }
+
+    @Override
+    public boolean isRandomlyTicking(@NotNull BlockState state) {
+        return type.oxidizedChest() != null;
     }
 }

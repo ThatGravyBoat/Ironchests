@@ -6,7 +6,7 @@ import com.mojang.math.Vector3f;
 import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -62,15 +62,15 @@ public class ChestRenderer<T extends GenericChestBlockEntity> implements BlockEn
         poseStack.translate(0,0.63,0.065);
         poseStack.mulPose(Vector3f.XP.rotationDegrees(-chest.getOpenness(f)));
         poseStack.translate(0,-0.63,-0.065);
-        blockRenderer.getModelRenderer().renderModel(poseStack.last(), multiBufferSource.getBuffer(type.transparent() ? RenderType.translucentMovingBlock() : RenderType.cutout()), null, lid, 0.0F, 0.0F, 0.0F, i, OverlayTexture.NO_OVERLAY);
+        blockRenderer.getModelRenderer().renderModel(poseStack.last(), multiBufferSource.getBuffer(type.transparent() ? Sheets.translucentCullBlockSheet() : Sheets.cutoutBlockSheet()), null, lid, 1.0F, 1.0F, 1.0F, i, OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
 
-        blockRenderer.getModelRenderer().renderModel(poseStack.last(), multiBufferSource.getBuffer(type.transparent() ? RenderType.translucentMovingBlock() : RenderType.cutout()), null, base, 0.0F, 0.0F, 0.0F, i, OverlayTexture.NO_OVERLAY);
+        blockRenderer.getModelRenderer().renderModel(poseStack.last(), multiBufferSource.getBuffer(type.transparent() ? Sheets.translucentCullBlockSheet() : Sheets.cutoutBlockSheet()), null, base, 1.0F, 1.0F, 1.0F, i, OverlayTexture.NO_OVERLAY);
 
         if (chest.getBlockState().getValue(GenericChestBlock.LOCK).equals(LockState.LOCKED)) {
-            blockRenderer.getModelRenderer().renderModel(poseStack.last(), multiBufferSource.getBuffer(RenderType.cutout()), null, lockLocked, 1.0F, 1.0F, 1.0F, i, OverlayTexture.NO_OVERLAY);
+            blockRenderer.getModelRenderer().renderModel(poseStack.last(), multiBufferSource.getBuffer(Sheets.cutoutBlockSheet()), null, lockLocked, 1.0F, 1.0F, 1.0F, i, OverlayTexture.NO_OVERLAY);
         } else if (chest.getBlockState().getValue(GenericChestBlock.LOCK).equals(LockState.UNLOCKED)) {
-            blockRenderer.getModelRenderer().renderModel(poseStack.last(), multiBufferSource.getBuffer(RenderType.cutout()), null, lockUnlocked, 1.0F, 1.0F, 1.0F, i, OverlayTexture.NO_OVERLAY);
+            blockRenderer.getModelRenderer().renderModel(poseStack.last(), multiBufferSource.getBuffer(Sheets.cutoutBlockSheet()), null, lockUnlocked, 1.0F, 1.0F, 1.0F, i, OverlayTexture.NO_OVERLAY);
         }
 
         profiler.push("renderItems");
