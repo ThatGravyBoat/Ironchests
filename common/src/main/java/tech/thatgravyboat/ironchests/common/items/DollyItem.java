@@ -134,11 +134,11 @@ public class DollyItem extends Item {
         super.appendHoverText(stack, level, list, tooltipFlag);
     }
 
-    public static boolean hasChest(ItemStack stack){
+    public static boolean hasChest(ItemStack stack) {
         return stack.hasTag() && stack.getOrCreateTag().contains("BlockStateTag") && stack.getOrCreateTag().contains("BlockEntityTag");
     }
 
-    public static float getChestId(ItemStack stack){
+    public static float getChestId(ItemStack stack) {
         return hasChest(stack) ? 1f : -1f;
     }
 

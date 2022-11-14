@@ -11,7 +11,7 @@ public interface ISyncableData {
 
     default void sync(@NotNull Level level, @NotNull BlockPos pos) {
         if (level.isClientSide) return;
-        NetPacketHandler.sendToAllLoaded(new SyncMessage(pos, getSyncTag()), level, pos);
+        NetPacketHandler.CHANNEL.sendToAllLoaded(new SyncMessage(pos, getSyncTag()), level, pos);
     }
 
     void loadSyncTag(CompoundTag tag);

@@ -6,10 +6,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import tech.thatgravyboat.ironchests.api.chesttype.ChestType;
 import tech.thatgravyboat.ironchests.api.chesttype.ChestUpgradeType;
-import tech.thatgravyboat.ironchests.common.items.DollyItem;
-import tech.thatgravyboat.ironchests.common.items.KeyItem;
-import tech.thatgravyboat.ironchests.common.items.LockItem;
-import tech.thatgravyboat.ironchests.common.items.UpgradeItem;
+import tech.thatgravyboat.ironchests.common.items.*;
 import tech.thatgravyboat.ironchests.common.registry.custom.ChestTypeRegistry;
 import tech.thatgravyboat.ironchests.common.registry.custom.ChestUpgradeTypeRegistry;
 
@@ -25,6 +22,7 @@ public class ItemRegistry {
     public static final Supplier<Item> BLANK_UPGRADE = register("blank_chest_upgrade", () -> new Item(new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
     public static final Supplier<Item> LOCK = register("lock", () -> new LockItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
     public static final Supplier<Item> KEY = register("key", () -> new KeyItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
+    public static final Supplier<Item> KEY_RING = register("key_ring", () -> new KeyRingItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
     public static final Supplier<Item> DIAMOND_DOLLY = register("diamond_dolly", () -> new DollyItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC).stacksTo(1)));
     public static final Supplier<Item> IRON_DOLLY = register("iron_dolly", () -> new DollyItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC).durability(15)));
 

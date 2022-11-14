@@ -253,15 +253,12 @@ public class GenericChestBlockEntity extends BaseContainerBlockEntity implements
         this.keyId = uuid;
     }
 
-    public boolean isRightKey(ItemStack key) {
-        if (!key.hasTag() || (key.getTag() != null && !key.getTag().contains("key"))) return false;
-        return key.getTag().contains("key") && key.getTag().getUUID("key").equals(keyId);
+    public boolean isRightKey(UUID key) {
+        return key.equals(keyId);
     }
 
-    public void setLockKey(ItemStack key){
-        if (key.hasTag() && key.getTag() != null && key.getTag().contains("key")) return;
-        if (this.keyId == null) return;
-        key.getOrCreateTag().putUUID("key", this.keyId);
+    public UUID getKeyId() {
+        return keyId;
     }
 
     public boolean canDropLock() {
@@ -293,6 +290,5 @@ public class GenericChestBlockEntity extends BaseContainerBlockEntity implements
     public boolean canTakeItemThroughFace(int i, @NotNull ItemStack itemStack, @NotNull Direction direction) {
         return keyId == null || this.getBlockState().getValue(GenericChestBlock.LOCK).canOpen();
     }
-
     //endregion
 }

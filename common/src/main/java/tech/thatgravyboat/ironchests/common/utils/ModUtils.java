@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class ModUtils {
     @ExpectPlatform
@@ -20,6 +21,6 @@ public class ModUtils {
     }
 
     public static Optional<CompoundTag> getTag(ItemStack stack) {
-        return Optional.ofNullable(stack.getTag());
+        return Optional.ofNullable(stack.getTag()).filter(Predicate.not(CompoundTag::isEmpty));
     }
 }

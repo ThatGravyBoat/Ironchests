@@ -21,7 +21,7 @@ import tech.thatgravyboat.ironchests.common.utils.ModUtils;
 
 import java.util.List;
 
-public class KeyItem extends Item {
+public class KeyItem extends Item implements UnlockableItem {
 
     public KeyItem(Properties properties) {
         super(properties);
@@ -41,19 +41,16 @@ public class KeyItem extends Item {
 
             if (state.getValue(GenericChestBlock.LOCK).equals(LockState.NO_LOCK)) return InteractionResult.PASS;
 
-            if (stack.hasTag() && stack.getOrCreateTag().contains("key") && chestBlockEntity.isRightKey(stack)){
+            if (canUseOn(context.getPlayer(), stack, chestBlockEntity)) {
                 level.setBlock(pos, state.setValue(GenericChestBlock.LOCK, state.getValue(GenericChestBlock.LOCK).opposite()), 2);
                 level.updateNeighbourForOutputSignal(pos, state.getBlock());
                 return InteractionResult.SUCCESS;
             }
 
-            if ((!stack.hasTag() || !stack.getOrCreateTag().contains("key")) && state.getValue(GenericChestBlock.LOCK).equals(LockState.UNLOCKED)){
-                chestBlockEntity.setLockKey(stack);
-                stack.getOrCreateTag().put("chest", NbtUtils.writeBlockPos(pos));
-                stack.getOrCreateTag().putString("chestType", Component.Serializer.toJson(chestBlockEntity.getDisplayName()));
+            if ((canAddNewChest(stack)) && state.getValue(GenericChestBlock.LOCK).equals(LockState.UNLOCKED)) {
+                addKey(stack, chestBlockEntity);
                 return InteractionResult.SUCCESS;
             }
-
         }
 
         return InteractionResult.PASS;
@@ -61,11 +58,7 @@ public class KeyItem extends Item {
 
     @Override
     public boolean isFoil(@NotNull ItemStack itemStack) {
-        return hasKeyId(itemStack) || super.isFoil(itemStack);
-    }
-
-    private boolean hasKeyId(ItemStack stack){
-        return stack.hasTag() && stack.getOrCreateTag().contains("key");
+        return hasChest(itemStack) || super.isFoil(itemStack);
     }
 
     @Override

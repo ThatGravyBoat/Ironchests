@@ -1,6 +1,8 @@
 {
   "item.key.chesttype": "Chest Name: ",
   "item.key.chestpos": "Chest Position: [X=%d, Y=%d, Z=%d]",
+  "item.key.keychest": "%s : [X=%d, Y=%d, Z=%d]",
+  "item.key.keyring.desc": "Keys:",
   "item.dolly.chestid": "Chest: %s",
   "container.chest.dirt": "Dirt Chest",
   "container.chest.copper": "Copper Chest",
@@ -19,6 +21,7 @@
   "block.ironchests.obsidian_chest": "Obsidian Chest",
   "block.ironchests.netherite_chest": "Netherite Chest",
   "item.ironchests.key": "Key",
+  "item.ironchests.key_ring": "Key Ring",
   "item.ironchests.lock": "Lock",
   "item.ironchests.blank_chest_upgrade": "Blank Chest Upgrade",
   "item.ironchests.copper_chest_upgrade": "Copper Chest Upgrade",

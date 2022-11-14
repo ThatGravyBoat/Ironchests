@@ -10,6 +10,8 @@ import tech.thatgravyboat.ironchests.client.IronChestsClient;
 import tech.thatgravyboat.ironchests.common.registry.custom.ChestTypeRegistry;
 
 import java.util.Locale;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class IronChestsForgeClient {
 

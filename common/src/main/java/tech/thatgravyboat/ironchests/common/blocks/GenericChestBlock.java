@@ -34,6 +34,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tech.thatgravyboat.ironchests.api.chesttype.ChestType;
+import tech.thatgravyboat.ironchests.common.items.KeyItem;
+import tech.thatgravyboat.ironchests.common.items.UnlockableItem;
 import tech.thatgravyboat.ironchests.common.registry.minecraft.ItemRegistry;
 
 @SuppressWarnings("deprecation")
@@ -103,6 +105,16 @@ public class GenericChestBlock extends BaseEntityBlock implements SimpleWaterlog
     }
 
     //region BlockState Stuff
+
+
+    @Override
+    public float getDestroyProgress(@NotNull BlockState state, @NotNull Player player, @NotNull BlockGetter level, @NotNull BlockPos pos) {
+        if (state.hasProperty(LOCK) && !state.getValue(LOCK).canOpen() && level.getBlockEntity(pos) instanceof GenericChestBlockEntity chest) {
+            return player.getInventory().items.stream().filter(stack -> stack.getItem() instanceof UnlockableItem)
+                    .anyMatch(item -> ((UnlockableItem) item.getItem()).canUseOn(player, item, chest)) ? super.getDestroyProgress(state, player, level, pos) : 0.001f;
+        }
+        return super.getDestroyProgress(state, player, level, pos);
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

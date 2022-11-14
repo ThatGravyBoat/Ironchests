@@ -1,18 +1,16 @@
 package tech.thatgravyboat.ironchests.common.network;
 
+import com.teamresourceful.resourcefullib.common.networking.base.Packet;
+import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
+import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
 import tech.thatgravyboat.ironchests.IronChests;
 import tech.thatgravyboat.ironchests.common.blocks.ISyncableData;
-import tech.thatgravyboat.ironchests.common.network.handlers.IPacket;
-import tech.thatgravyboat.ironchests.common.network.handlers.IPacketHandler;
 
-import java.util.function.Consumer;
-
-public record SyncMessage(BlockPos pos, CompoundTag tag) implements IPacket<SyncMessage> {
+public record SyncMessage(BlockPos pos, CompoundTag tag) implements Packet<SyncMessage> {
 
     public static Handler HANDLER = new Handler();
     public static final ResourceLocation ID = new ResourceLocation(IronChests.MODID, "sync");
@@ -23,11 +21,11 @@ public record SyncMessage(BlockPos pos, CompoundTag tag) implements IPacket<Sync
     }
 
     @Override
-    public IPacketHandler<SyncMessage> getHandler() {
+    public PacketHandler<SyncMessage> getHandler() {
         return HANDLER;
     }
 
-    private static class Handler implements IPacketHandler<SyncMessage> {
+    private static class Handler implements PacketHandler<SyncMessage> {
 
         @Override
         public void encode(SyncMessage message, FriendlyByteBuf buffer) {
@@ -41,10 +39,10 @@ public record SyncMessage(BlockPos pos, CompoundTag tag) implements IPacket<Sync
         }
 
         @Override
-        public Consumer<Player> handle(SyncMessage message) {
-            return (player) -> {
-                if (player != null && player.level.isLoaded(message.pos)) {
-                    if (player.level.getBlockEntity(message.pos) instanceof ISyncableData syncableData) {
+        public PacketContext handle(SyncMessage message) {
+            return (player, level) -> {
+                if (player != null && level.isLoaded(message.pos)) {
+                    if (level.getBlockEntity(message.pos) instanceof ISyncableData syncableData) {
                         syncableData.loadSyncTag(message.tag);
                     }
                 }

@@ -7,6 +7,7 @@ import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -62,23 +63,31 @@ public class ChestRenderer<T extends GenericChestBlockEntity> implements BlockEn
         poseStack.translate(0,0.63,0.065);
         poseStack.mulPose(Vector3f.XP.rotationDegrees(-chest.getOpenness(f)));
         poseStack.translate(0,-0.63,-0.065);
-        blockRenderer.getModelRenderer().renderModel(poseStack.last(), multiBufferSource.getBuffer(type.transparent() ? RenderType.translucentMovingBlock() : RenderType.cutout()), null, lid, 0.0F, 0.0F, 0.0F, i, OverlayTexture.NO_OVERLAY);
+        RenderType renderType = type.transparent() ? Sheets.translucentCullBlockSheet() : Sheets.cutoutBlockSheet();
+        renderBlock(poseStack, multiBufferSource, renderType, lid, i);
         poseStack.popPose();
 
-        blockRenderer.getModelRenderer().renderModel(poseStack.last(), multiBufferSource.getBuffer(type.transparent() ? RenderType.translucentMovingBlock() : RenderType.cutout()), null, base, 0.0F, 0.0F, 0.0F, i, OverlayTexture.NO_OVERLAY);
+        renderBlock(poseStack, multiBufferSource, renderType, base, i);
 
         if (chest.getBlockState().getValue(GenericChestBlock.LOCK).equals(LockState.LOCKED)) {
-            blockRenderer.getModelRenderer().renderModel(poseStack.last(), multiBufferSource.getBuffer(RenderType.cutout()), null, lockLocked, 1.0F, 1.0F, 1.0F, i, OverlayTexture.NO_OVERLAY);
+            renderBlock(poseStack, multiBufferSource, Sheets.cutoutBlockSheet(), lockLocked, i);
         } else if (chest.getBlockState().getValue(GenericChestBlock.LOCK).equals(LockState.UNLOCKED)) {
-            blockRenderer.getModelRenderer().renderModel(poseStack.last(), multiBufferSource.getBuffer(RenderType.cutout()), null, lockUnlocked, 1.0F, 1.0F, 1.0F, i, OverlayTexture.NO_OVERLAY);
+            renderBlock(poseStack, multiBufferSource, Sheets.cutoutBlockSheet(), lockUnlocked, i);
         }
 
         profiler.push("renderItems");
-        if (type.renderItems() && (Minecraft.getInstance().options.graphicsMode().get().equals(GraphicsStatus.FABULOUS) || chest.getOpenness(f) > 0f)) renderItems(poseStack, chest, f, multiBufferSource, i, OverlayTexture.NO_OVERLAY);
+        if (type.renderItems() && (Minecraft.getInstance().options.graphicsMode().get().equals(GraphicsStatus.FABULOUS) || chest.getOpenness(f) > 0f)) renderItems(poseStack, chest, f, multiBufferSource, i);
         profiler.pop();
 
         poseStack.popPose();
         profiler.pop();
+    }
+
+    private static void renderBlock(PoseStack poseStack, MultiBufferSource multiBufferSource, RenderType renderType, BakedModel model, int i) {
+        Minecraft.getInstance()
+                .getBlockRenderer()
+                .getModelRenderer()
+                .renderModel(poseStack.last(), multiBufferSource.getBuffer(renderType), null, model, 1.0F, 1.0F, 1.0F, i, OverlayTexture.NO_OVERLAY);
     }
 
     private void initModels(BlockRenderDispatcher dispatcher) {
@@ -96,7 +105,7 @@ public class ChestRenderer<T extends GenericChestBlockEntity> implements BlockEn
             ChestRenderer.lockLocked = IronChestsClient.loadModel(dispatcher, new ResourceLocation(IronChests.MODID, "block/locked"));
     }
 
-    private void renderItems(PoseStack poseStack, GenericChestBlockEntity blockEntity, float tickDelta, MultiBufferSource vertexConsumers, int light, int overlay) {
+    private void renderItems(PoseStack poseStack, GenericChestBlockEntity blockEntity, float tickDelta, MultiBufferSource vertexConsumers, int light) {
         NonNullList<ItemStack> inv = blockEntity.getItems();
 
         poseStack.translate(0.26,0.2, 0.26);
@@ -107,23 +116,23 @@ public class ChestRenderer<T extends GenericChestBlockEntity> implements BlockEn
         for (int i = 0; i < 3; i++) {//Rows
             for (int j = 0; j < 3; j++) {//Row Length
                 if (inv.get(index).getItem() != Items.AIR)
-                    renderItem(0.24 * i, 0, 0.24 * j, inv.get(index), poseStack, blockEntity.getLevel().getGameTime() + tickDelta, vertexConsumers, light, overlay);
+                    renderItem(0.24 * i, 0, 0.24 * j, inv.get(index), poseStack, blockEntity.getLevel().getGameTime() + tickDelta, vertexConsumers, light);
                 index++;
                 if (inv.get(index).getItem() != Items.AIR)
-                    renderItem(0.24 * i, 0.2f, 0.24 * j, inv.get(index), poseStack, blockEntity.getLevel().getGameTime() + tickDelta, vertexConsumers, light, overlay);
+                    renderItem(0.24 * i, 0.2f, 0.24 * j, inv.get(index), poseStack, blockEntity.getLevel().getGameTime() + tickDelta, vertexConsumers, light);
                 index++;
             }
         }
 
     }
 
-    private void renderItem(double x, double y, double z, ItemStack stack, PoseStack matrices, float rotation, MultiBufferSource vertexConsumers, int light, int overlay) {
+    private void renderItem(double x, double y, double z, ItemStack stack, PoseStack matrices, float rotation, MultiBufferSource vertexConsumers, int light) {
         ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
         matrices.pushPose();
         matrices.translate(x, y, z);
         matrices.scale(0.5f, 0.5f, 0.5f);
         matrices.mulPose(Vector3f.YP.rotationDegrees(rotation));
-        renderer.renderStatic(stack, ItemTransforms.TransformType.GROUND, light, overlay, matrices, vertexConsumers, 0);
+        renderer.renderStatic(stack, ItemTransforms.TransformType.GROUND, light, OverlayTexture.NO_OVERLAY, matrices, vertexConsumers, 0);
         matrices.popPose();
     }
 }

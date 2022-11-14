@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "minecraft:chest",
+
     { "required": false, "id": "quark:acacia_chest" },
     { "required": false, "id": "quark:azalea_chest" },
     { "required": false, "id": "quark:birch_chest" },

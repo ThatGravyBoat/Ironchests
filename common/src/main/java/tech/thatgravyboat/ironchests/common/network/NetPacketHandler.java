@@ -1,26 +1,15 @@
 package tech.thatgravyboat.ironchests.common.network;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
-import tech.thatgravyboat.ironchests.common.network.handlers.IPacket;
-import tech.thatgravyboat.ironchests.common.network.handlers.IPacketHandler;
+import com.teamresourceful.resourcefullib.common.networking.NetworkChannel;
+import com.teamresourceful.resourcefullib.common.networking.base.NetworkDirection;
+import tech.thatgravyboat.ironchests.IronChests;
 
 public class NetPacketHandler {
 
+    public static final NetworkChannel CHANNEL = new NetworkChannel(IronChests.MODID, 1, "main");
+
     public static void init() {
-        registerServerToClientPacket(SyncMessage.ID, SyncMessage.HANDLER, SyncMessage.class);
-    }
-
-    @ExpectPlatform
-    public static <T extends IPacket<T>> void sendToAllLoaded(T packet, Level level, BlockPos pos) {
-        throw new AssertionError();
-    }
-
-    @ExpectPlatform
-    public static <T> void registerServerToClientPacket(ResourceLocation location, IPacketHandler<T> handler, Class<T> tClass) {
-        throw new AssertionError();
+        CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, SyncMessage.ID, SyncMessage.HANDLER, SyncMessage.class);
     }
 
 }

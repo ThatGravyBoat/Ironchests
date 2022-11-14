@@ -5,8 +5,8 @@ import com.mojang.serialization.Decoder;
 import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import tech.thatgravyboat.ironchests.api.CodecUtils;
 import tech.thatgravyboat.ironchests.api.property.Properties;
 import tech.thatgravyboat.ironchests.api.property.base.IBlockProperty;
 
@@ -49,7 +49,7 @@ public record ChestType(String name, int length, int rows, int size,
                 Properties.CODEC.fieldOf("properties").forGetter(ChestType::properties),
                 Codec.BOOL.fieldOf("transparent").orElse(false).forGetter(ChestType::transparent),
                 Codec.STRING.fieldOf("texture").orElse(name).forGetter(ChestType::texture),
-                CodecUtils.passthrough(ItemPredicate::serializeToJson, ItemPredicate::fromJson).fieldOf("predicate").orElse(ItemPredicate.ANY).forGetter(ChestType::predicate),
+                CodecExtras.passthrough(ItemPredicate::serializeToJson, ItemPredicate::fromJson).fieldOf("predicate").orElse(ItemPredicate.ANY).forGetter(ChestType::predicate),
                 Codec.BOOL.fieldOf("renderItems").orElse(false).forGetter(ChestType::renderItems),
                 Codec.BOOL.fieldOf("fireResistant").orElse(false).forGetter(ChestType::fireResistant)
         ).apply(instance, ChestType::new));
