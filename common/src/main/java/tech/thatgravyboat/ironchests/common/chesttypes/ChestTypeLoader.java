@@ -13,25 +13,34 @@ import tech.thatgravyboat.ironchests.common.registry.custom.ChestUpgradeTypeRegi
 import tech.thatgravyboat.ironchests.common.utils.ModPaths;
 import tech.thatgravyboat.ironchests.common.utils.ModUtils;
 
-import java.io.File;
 import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 
 public class ChestTypeLoader {
 
     private static final Gson GSON = new Gson();
 
     public static void setupChest() {
-        File file = new File(ModPaths.LOCK_FILE.toString(), "defaults.lock");
-        if (!file.exists()) {
-            writeEmptyFile(file);
-            setupDefaultFiles("/data/ironchests/chests", ModPaths.CHESTS);
-            setupDefaultFiles("/data/ironchests/upgrade_types", ModPaths.UPGRADE_TYPES);
-        }
+        LoaderConfig.load();
+        setupDefaultFiles("/data/ironchests/chests", ModPaths.CHESTS, "chests");
+        setupDefaultFiles("/data/ironchests/barrels", ModPaths.BARRELS, "barrels");
+        setupDefaultFiles("/data/ironchests/upgrade_types", ModPaths.UPGRADE_TYPES, "chest_upgrades");
         FileUtils.streamFilesAndParse(ModPaths.CHESTS, ChestTypeLoader::parseChest);
         FileUtils.streamFilesAndParse(ModPaths.UPGRADE_TYPES, ChestTypeLoader::parseChestUpgrade);
+        runChestChecks();
+        LoaderConfig.save();
+    }
+
+    private static void runChestChecks() {
+        // Checks if oxidized chest exists.
+        ChestTypeRegistry.INSTANCE.getChests()
+                .values()
+                .stream()
+                .map(ChestType::oxidizedChest)
+                .filter(Objects::nonNull)
+                .forEach(ChestUpgradeType::get);
     }
 
     private static void parseChest(Reader reader, String name) {
@@ -48,6 +57,12 @@ public class ChestTypeLoader {
                 .ifPresent(ChestUpgradeTypeRegistry.INSTANCE::register);
     }
 
+    private static void setupDefaultFiles(String dataPath, Path targetPath, String id) {
+        if (LoaderConfig.get(id)) return;
+        LoaderConfig.set(id, true);
+        setupDefaultFiles(dataPath, targetPath);
+    }
+
     private static void setupDefaultFiles(String dataPath, Path targetPath) {
         List<Path> roots = ModUtils.getModFilePath(IronChests.MODID);
 
@@ -55,16 +70,8 @@ public class ChestTypeLoader {
             throw new RuntimeException("Failed to load defaults.");
         }
 
-        for (Path modRoot : ModUtils.getModFilePath(IronChests.MODID)) {
+        for (Path modRoot : roots) {
             FileUtils.copyDefaultFiles(dataPath, targetPath, modRoot);
-        }
-    }
-
-    private static void writeEmptyFile(File file) {
-        try {
-            org.apache.commons.io.FileUtils.write(file, "", StandardCharsets.UTF_8);
-        } catch (Exception e) {
-            //Ignore
         }
     }
 }

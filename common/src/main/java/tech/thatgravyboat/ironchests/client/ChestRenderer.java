@@ -19,9 +19,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.ChestBlock;
 import org.jetbrains.annotations.NotNull;
 import tech.thatgravyboat.ironchests.IronChests;
+import tech.thatgravyboat.ironchests.api.chesttype.ChestBlockType;
 import tech.thatgravyboat.ironchests.api.chesttype.ChestType;
 import tech.thatgravyboat.ironchests.common.blocks.GenericChestBlock;
 import tech.thatgravyboat.ironchests.common.blocks.GenericChestBlockEntity;
@@ -55,28 +55,32 @@ public class ChestRenderer<T extends GenericChestBlockEntity> implements BlockEn
 
         RenderSystem.enableDepthTest();
         poseStack.translate(0.5D, 1D, 0.5D);
-        poseStack.mulPose(Vector3f.YP.rotationDegrees(-chest.getBlockState().getValue(ChestBlock.FACING).toYRot()));
+        poseStack.mulPose(Vector3f.YP.rotationDegrees(-chest.getBlockState().getValue(GenericChestBlock.getFacingProperty(type)).toYRot()));
         poseStack.translate(-0.5D, -1D, -0.5D);
 
         poseStack.pushPose();
         //Pivot
-        poseStack.translate(0,0.63,0.065);
+        poseStack.translate(0, 0.63, 0.065);
         poseStack.mulPose(Vector3f.XP.rotationDegrees(-chest.getOpenness(f)));
-        poseStack.translate(0,-0.63,-0.065);
-        RenderType renderType = type.transparent() ? Sheets.translucentCullBlockSheet() : Sheets.cutoutBlockSheet();
-        renderBlock(poseStack, multiBufferSource, renderType, lid, i);
-        poseStack.popPose();
+        poseStack.translate(0, -0.63, -0.065);
+        if (type.blockType() == ChestBlockType.CHEST) {
+            RenderType renderType = type.transparent() ? Sheets.translucentCullBlockSheet() : Sheets.cutoutBlockSheet();
+            renderBlock(poseStack, multiBufferSource, renderType, lid, i);
+            poseStack.popPose();
 
-        renderBlock(poseStack, multiBufferSource, renderType, base, i);
+            renderBlock(poseStack, multiBufferSource, renderType, base, i);
 
-        if (chest.getBlockState().getValue(GenericChestBlock.LOCK).equals(LockState.LOCKED)) {
-            renderBlock(poseStack, multiBufferSource, Sheets.cutoutBlockSheet(), lockLocked, i);
-        } else if (chest.getBlockState().getValue(GenericChestBlock.LOCK).equals(LockState.UNLOCKED)) {
-            renderBlock(poseStack, multiBufferSource, Sheets.cutoutBlockSheet(), lockUnlocked, i);
+            if (chest.getBlockState().getValue(GenericChestBlock.LOCK).equals(LockState.LOCKED)) {
+                renderBlock(poseStack, multiBufferSource, Sheets.cutoutBlockSheet(), lockLocked, i);
+            } else if (chest.getBlockState().getValue(GenericChestBlock.LOCK).equals(LockState.UNLOCKED)) {
+                renderBlock(poseStack, multiBufferSource, Sheets.cutoutBlockSheet(), lockUnlocked, i);
+            }
+        } else {
+            poseStack.popPose();
         }
 
         profiler.push("renderItems");
-        if (type.renderItems() && (Minecraft.getInstance().options.graphicsMode().get().equals(GraphicsStatus.FABULOUS) || chest.getOpenness(f) > 0f)) renderItems(poseStack, chest, f, multiBufferSource, i);
+        if (type.renderItems() && (Minecraft.getInstance().options.graphicsMode().get().equals(GraphicsStatus.FABULOUS) || chest.getOpenness(f) > 0f || type.blockType() != ChestBlockType.CHEST)) renderItems(poseStack, chest, f, multiBufferSource, i);
         profiler.pop();
 
         poseStack.popPose();

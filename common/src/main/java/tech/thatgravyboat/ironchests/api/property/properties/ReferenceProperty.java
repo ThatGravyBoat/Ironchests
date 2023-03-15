@@ -5,10 +5,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import tech.thatgravyboat.ironchests.api.property.base.IBlockProperty;
-import tech.thatgravyboat.ironchests.api.property.base.IBlockPropertyType;
+import tech.thatgravyboat.ironchests.api.property.base.BlockProperty;
+import tech.thatgravyboat.ironchests.api.property.base.BlockPropertyType;
 
-public record ReferenceProperty(Block block) implements IBlockProperty {
+public record ReferenceProperty(Block block) implements BlockProperty {
 
     public static final Type TYPE = new Type();
 
@@ -18,11 +18,11 @@ public record ReferenceProperty(Block block) implements IBlockProperty {
     }
 
     @Override
-    public IBlockPropertyType getType() {
+    public BlockPropertyType getType() {
         return TYPE;
     }
 
-    private static class Type implements IBlockPropertyType {
+    private static class Type implements BlockPropertyType {
 
         private static final Codec<ReferenceProperty> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Registry.BLOCK.byNameCodec().fieldOf("block").forGetter(ReferenceProperty::block)

@@ -1,12 +1,16 @@
 package tech.thatgravyboat.ironchests.common.registry.minecraft;
 
+import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
+import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import tech.thatgravyboat.ironchests.IronChests;
 import tech.thatgravyboat.ironchests.api.chesttype.ChestType;
 import tech.thatgravyboat.ironchests.common.blocks.GenericChestBlock;
 import tech.thatgravyboat.ironchests.common.blocks.GenericChestBlockEntity;
@@ -16,34 +20,22 @@ import java.util.function.Supplier;
 
 public class BlockRegistry {
 
+    public static final ResourcefulRegistry<Block> BLOCKS = ResourcefulRegistries.create(Registry.BLOCK, IronChests.MODID);
+    public static final ResourcefulRegistry<BlockEntityType<?>> BLOCK_ENTITIES = ResourcefulRegistries.create(Registry.BLOCK_ENTITY_TYPE, IronChests.MODID);
+
     public static void init() {
         ChestTypeRegistry.INSTANCE.getChests().forEach(BlockRegistry::registerBoth);
+        BLOCKS.init();
+        BLOCK_ENTITIES.init();
     }
 
     private static void registerBoth(String id, ChestType type) {
-        registerChest(id, type);
-        registerChestEntity(id, type);
-    }
-
-    private static void registerChest(String id, ChestType type) {
-        var register = registerBlock(id, () -> new GenericChestBlock(type, type.properties().getProperties()));
-        type.registries().setBlockSupplier(register);
-    }
-
-    private static void registerChestEntity(String id, ChestType type) {
-        var entityType = registerBlockEntity(id,
-                () -> createBlockEntityType((pos, state) -> new GenericChestBlockEntity(pos, state, type), type.registries().getBlock().get()));
-        type.registries().setBlockEntityType(entityType);
-    }
-
-    @ExpectPlatform
-    public static <T extends Block> Supplier<T> registerBlock(String id, Supplier<T> item) {
-        throw new AssertionError();
-    }
-
-    @ExpectPlatform
-    public static <E extends BlockEntity, T extends BlockEntityType<E>> Supplier<T> registerBlockEntity(String id, Supplier<T> item) {
-        throw new AssertionError();
+        type.registries().setBlockSupplier(BLOCKS.register(id,
+                () -> GenericChestBlock.create(type, type.properties().getProperties())
+        ));
+        type.registries().setBlockEntityType(BLOCK_ENTITIES.register(id,
+                () -> createBlockEntityType((pos, state) -> new GenericChestBlockEntity(pos, state, type), type.registries().getBlock().get())
+        ));
     }
 
     @ExpectPlatform

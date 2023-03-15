@@ -1,0 +1,8 @@
+{
+    "parent": "minecraft:block/cube_bottom_top",
+    "textures": {
+        "bottom": "ironchests:block/barrels/iron/bottom",
+        "side": "ironchests:block/barrels/iron/side",
+        "top": "ironchests:block/barrels/iron/top_open"
+    }
+}

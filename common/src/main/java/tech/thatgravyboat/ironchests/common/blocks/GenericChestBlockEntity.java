@@ -17,6 +17,7 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
@@ -37,7 +38,6 @@ public class GenericChestBlockEntity extends BaseContainerBlockEntity implements
     private final MenuType<GenericChestMenu> menuType;
     private final ContainerOpenersCounter openersCounter;
     private UUID keyId;
-    private boolean isOpened;
     private float openness;
     private float lastOpenness;
 
@@ -54,17 +54,19 @@ public class GenericChestBlockEntity extends BaseContainerBlockEntity implements
             @Override
             protected void onOpen(@NotNull Level level, @NotNull BlockPos blockPos, @NotNull BlockState blockState) {
                 sync(level, blockPos);
-                level.playSound(null, blockPos.getX() + 0.5D, blockPos.getY() + 0.5D, blockPos.getZ() + 0.5D, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
+                level.playSound(null, blockPos.getX() + 0.5D, blockPos.getY() + 0.5D, blockPos.getZ() + 0.5D, type.blockType().getOpenSound(), SoundSource.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
             }
 
             @Override
             protected void onClose(@NotNull Level level, @NotNull BlockPos blockPos, @NotNull BlockState blockState) {
-                level.playSound(null, blockPos.getX() + 0.5D, blockPos.getY() + 0.5D, blockPos.getZ() + 0.5D, SoundEvents.CHEST_CLOSE, SoundSource.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
+                level.playSound(null, blockPos.getX() + 0.5D, blockPos.getY() + 0.5D, blockPos.getZ() + 0.5D, type.blockType().getCloseSound(), SoundSource.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
             }
 
             @Override
             protected void openerCountChanged(@NotNull Level level, @NotNull BlockPos blockPos, @NotNull BlockState blockState, int i, int j) {
-                level.blockEvent(blockPos, blockState.getBlock(), 1, j);
+                if (blockState.hasProperty(GenericChestBlock.OPEN)) {
+                    level.setBlock(blockPos, blockState.setValue(GenericChestBlock.OPEN, j > 0), Block.UPDATE_ALL);
+                }
             }
 
             @Override
@@ -82,7 +84,7 @@ public class GenericChestBlockEntity extends BaseContainerBlockEntity implements
 
     @Override
     protected @NotNull Component getDefaultName() {
-        return Component.translatable("container.chest."+type.name().toLowerCase(Locale.ENGLISH));
+        return type.registries().getBlock().get().getName();
     }
 
     @Override
@@ -202,15 +204,6 @@ public class GenericChestBlockEntity extends BaseContainerBlockEntity implements
             this.openersCounter.decrementOpeners(player, this.level, this.getBlockPos(), this.getBlockState());
     }
 
-    @Override
-    public boolean triggerEvent(int id, int amount) {
-        if (id == 1) {
-            this.isOpened = amount > 0;
-            return true;
-        }
-        return super.triggerEvent(id, amount);
-    }
-
     public float getOpenness(float partialTicks){
         return Mth.lerp(partialTicks, lastOpenness, openness);
     }
@@ -218,8 +211,8 @@ public class GenericChestBlockEntity extends BaseContainerBlockEntity implements
     @SuppressWarnings("unused")
     public static void lidAnimateTick(Level level, BlockPos blockPos, BlockState blockState, GenericChestBlockEntity chestBlockEntity) {
         chestBlockEntity.lastOpenness = chestBlockEntity.openness;
-        if (chestBlockEntity.isOpened && chestBlockEntity.openness < 90f) chestBlockEntity.openness = Math.min(chestBlockEntity.openness + 12, 90);
-        else if (!chestBlockEntity.isOpened && chestBlockEntity.openness > 0f) chestBlockEntity.openness = Math.max(chestBlockEntity.openness - 12, 0);
+        if (blockState.getValue(GenericChestBlock.OPEN) && chestBlockEntity.openness < 90f) chestBlockEntity.openness = Math.min(chestBlockEntity.openness + 12, 90);
+        else if (!blockState.getValue(GenericChestBlock.OPEN) && chestBlockEntity.openness > 0f) chestBlockEntity.openness = Math.max(chestBlockEntity.openness - 12, 0);
     }
 
     //endregion

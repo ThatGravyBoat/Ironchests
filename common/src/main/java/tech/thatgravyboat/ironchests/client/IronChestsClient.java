@@ -30,7 +30,9 @@ public class IronChestsClient {
         for (ChestType value : ChestTypeRegistry.INSTANCE.getChests().values()) {
             registerScreen(value.registries().getMenu().get(), ChestScreen::new);
             registerEntityRenderer(value.registries().getBlockEntity().get(), context -> new ChestRenderer<>(value));
-            if (value.transparent()) setRenderLayer(value.registries().getBlock().get(), RenderType.translucent());
+            if (value.transparent()) {
+                setRenderLayer(value.registries().getBlock().get(), RenderType.translucent());
+            }
         }
 
         registerItemProperty(ItemRegistry.DIAMOND_DOLLY.get(), new ResourceLocation(IronChests.MODID, "dolly_filled"),

@@ -106,8 +106,11 @@ public class DollyItem extends Item {
         if (newState.hasProperty(ChestBlock.TYPE)){
             newState = newState.setValue(ChestBlock.TYPE, ChestType.SINGLE);
         }
-        if (newState.hasProperty(HorizontalDirectionalBlock.FACING)){
-            newState = newState.setValue(HorizontalDirectionalBlock.FACING, context.getHorizontalDirection().getOpposite());
+        if (newState.hasProperty(BlockStateProperties.HORIZONTAL_FACING)){
+            newState = newState.setValue(BlockStateProperties.HORIZONTAL_FACING, context.getHorizontalDirection().getOpposite());
+        }
+        if (newState.hasProperty(BlockStateProperties.FACING)){
+            newState = newState.setValue(BlockStateProperties.FACING, context.getHorizontalDirection().getOpposite());
         }
         return newState;
     }

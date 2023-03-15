@@ -18,7 +18,7 @@ public record ChestUpgradeType(ChestType from, ChestType to) {
         this(from.map(ChestUpgradeType::get).orElse(null), get(to));
     }
 
-    private static ChestType get(String id) {
+    public static ChestType get(String id) {
         if (!ChestTypeRegistry.INSTANCE.getChests().containsKey(id)) throw new RuntimeException("Chest type of '"+id+"' was not found.");
         return ChestTypeRegistry.INSTANCE.getChests().get(id);
     }

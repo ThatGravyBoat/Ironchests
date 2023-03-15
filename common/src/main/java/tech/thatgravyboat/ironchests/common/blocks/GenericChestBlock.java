@@ -3,8 +3,10 @@ package tech.thatgravyboat.ironchests.common.blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -22,10 +24,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
@@ -33,26 +32,42 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tech.thatgravyboat.ironchests.api.chesttype.ChestBlockType;
 import tech.thatgravyboat.ironchests.api.chesttype.ChestType;
-import tech.thatgravyboat.ironchests.common.items.KeyItem;
 import tech.thatgravyboat.ironchests.common.items.UnlockableItem;
+import tech.thatgravyboat.ironchests.common.items.UpgradeItem;
 import tech.thatgravyboat.ironchests.common.registry.minecraft.ItemRegistry;
 
 @SuppressWarnings("deprecation")
 public class GenericChestBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
 
-    private static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
-
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
     public static final EnumProperty<LockState> LOCK = EnumProperty.create("lock", LockState.class);
 
     protected final ChestType type;
 
-    public GenericChestBlock(ChestType type, Properties properties) {
+    protected GenericChestBlock(ChestType type, Properties properties) {
         super(properties);
         this.type = type;
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false).setValue(LOCK, LockState.NO_LOCK));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(getFacingProperty(type), Direction.NORTH)
+                .setValue(WATERLOGGED, false)
+                .setValue(LOCK, LockState.NO_LOCK)
+                .setValue(OPEN, false)
+        );
+    }
+
+    public static GenericChestBlock create(ChestType type, Properties properties) {
+        final ChestType chestType = type;
+        //This is a hack because we need to give the chest type to createBlockStateDefinition but because vanilla calling it
+        //in the base constructor, we can't pass it in. So we just need to use an anonymous class to get around this.
+        return new GenericChestBlock(type, properties) {
+            @Override
+            protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
+                builder.add(getFacingProperty(chestType), WATERLOGGED, LOCK, OPEN);
+            }
+        };
     }
 
     @Override
@@ -95,7 +110,7 @@ public class GenericChestBlock extends BaseEntityBlock implements SimpleWaterlog
 
     @Override
     public @NotNull VoxelShape getShape(@NotNull BlockState blockState, @NotNull BlockGetter blockGetter, @NotNull BlockPos blockPos, @NotNull CollisionContext collisionContext) {
-        return SHAPE;
+        return type.shape().shape();
     }
 
     @Nullable
@@ -117,25 +132,24 @@ public class GenericChestBlock extends BaseEntityBlock implements SimpleWaterlog
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, WATERLOGGED, LOCK);
-    }
-
-    @Override
     public @NotNull BlockState mirror(BlockState blockState, Mirror mirror) {
-        return blockState.rotate(mirror.getRotation(blockState.getValue(FACING)));
+        return blockState.rotate(mirror.getRotation(blockState.getValue(getFacingProperty(type))));
     }
 
     @Override
     public @NotNull BlockState rotate(BlockState blockState, Rotation rotation) {
-        return blockState.setValue(FACING, rotation.rotate(blockState.getValue(FACING)));
+        return blockState.setValue(getFacingProperty(type), rotation.rotate(blockState.getValue(getFacingProperty(type))));
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
-        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER).setValue(LOCK, LockState.NO_LOCK);
+        Direction direction = context.getHorizontalDirection().getOpposite();
+        if (getFacingProperty(type).equals(BlockStateProperties.FACING)) {
+            direction = context.getNearestLookingDirection().getOpposite();
+        }
+        return this.defaultBlockState().setValue(getFacingProperty(type), direction).setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER).setValue(LOCK, LockState.NO_LOCK);
     }
 
 
@@ -156,19 +170,40 @@ public class GenericChestBlock extends BaseEntityBlock implements SimpleWaterlog
 
     //endregion
 
-    private static boolean isBlockedChestByBlock(BlockGetter blockGetter, BlockPos blockPos) {
+    private boolean isBlockedChestByBlock(BlockGetter blockGetter, BlockPos blockPos) {
+        if (!this.type.blockType().canBeBlocked()) return false;
         BlockPos blockPos2 = blockPos.above();
         return blockGetter.getBlockState(blockPos2).isRedstoneConductor(blockGetter, blockPos2);
     }
 
     @Override
     public @NotNull RenderShape getRenderShape(@NotNull BlockState blockState) {
-        return RenderShape.ENTITYBLOCK_ANIMATED;
+        return type.blockType() == ChestBlockType.CHEST ? RenderShape.ENTITYBLOCK_ANIMATED : RenderShape.MODEL;
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState blockState, @NotNull BlockEntityType<T> blockEntityType) {
         return level.isClientSide ? createTickerHelper(blockEntityType, this.type.registries().getBlockEntity().get(), GenericChestBlockEntity::lidAnimateTick) : null;
+    }
+
+    @Override
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource randomSource) {
+        if (level.random.nextFloat() > 0.05f) return;
+        if (level.getBlockEntity(pos) instanceof GenericChestBlockEntity chest) {
+            ChestType newChest = chest.getChestType().getOxidizedChest();
+            if (newChest != null){
+                UpgradeItem.changeToChest(level, pos, chest, newChest);
+            }
+        }
+    }
+
+    @Override
+    public boolean isRandomlyTicking(@NotNull BlockState state) {
+        return type.oxidizedChest() != null;
+    }
+
+    public static Property<Direction> getFacingProperty(ChestType type) {
+        return type.blockType() == ChestBlockType.BARREL ? BlockStateProperties.FACING : BlockStateProperties.HORIZONTAL_FACING;
     }
 }

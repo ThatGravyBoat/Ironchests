@@ -12,6 +12,7 @@ public class ModPaths {
 
     public static final Path LOCK_FILE = createCustomPath("");
     public static final Path CHESTS = createCustomPath("chests");
+    public static final Path BARRELS = createCustomPath("chests/barrels");
     public static final Path UPGRADE_TYPES = createCustomPath("upgrade_types");
 
 

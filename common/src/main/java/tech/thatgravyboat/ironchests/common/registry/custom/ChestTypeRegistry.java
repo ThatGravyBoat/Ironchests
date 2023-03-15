@@ -23,7 +23,7 @@ public class ChestTypeRegistry implements IChestRegistry {
 
     @Override
     public void register(ChestType type) {
-        String name = String.format("%s_chest", type.name().toLowerCase(Locale.ROOT));
+        String name = String.format("%s_%s", type.name().toLowerCase(Locale.ROOT), type.blockType().id());
         if (CHESTS.containsKey(name)) {
             throw new IllegalArgumentException("Chest of '" + name + "' already exists.");
         }

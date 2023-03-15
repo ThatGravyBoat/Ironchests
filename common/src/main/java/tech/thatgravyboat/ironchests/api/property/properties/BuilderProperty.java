@@ -5,8 +5,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
-import tech.thatgravyboat.ironchests.api.property.base.IBlockProperty;
-import tech.thatgravyboat.ironchests.api.property.base.IBlockPropertyType;
+import tech.thatgravyboat.ironchests.api.property.base.BlockProperty;
+import tech.thatgravyboat.ironchests.api.property.base.BlockPropertyType;
 import tech.thatgravyboat.ironchests.api.property.MaterialHelper;
 import tech.thatgravyboat.ironchests.api.property.SoundTypeHelper;
 
@@ -15,7 +15,7 @@ import java.util.function.Function;
 public record BuilderProperty(Material material, int lightLevel, boolean noCollision,
                               boolean noOcclusion, boolean noDrops, boolean requiresCorrectToolForDrops, float friction,
                               float speedFactor, float jumpFactor, float destroyTime, float explosionResistance,
-                              SoundType soundType) implements IBlockProperty {
+                              SoundType soundType) implements BlockProperty {
 
     public static final Type TYPE = new Type();
 
@@ -37,11 +37,11 @@ public record BuilderProperty(Material material, int lightLevel, boolean noColli
     }
 
     @Override
-    public IBlockPropertyType getType() {
+    public BlockPropertyType getType() {
         return TYPE;
     }
 
-    private static class Type implements IBlockPropertyType {
+    private static class Type implements BlockPropertyType {
 
         private static final Codec<Material> MATERIAL_CODEC = Codec.STRING.comapFlatMap(MaterialHelper::getMaterial, Object::toString);
         private static final Codec<SoundType> SOUND_CODEC = Codec.STRING.comapFlatMap(SoundTypeHelper::getSound, Object::toString);

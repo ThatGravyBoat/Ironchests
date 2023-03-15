@@ -69,7 +69,7 @@ public class KeyRingItem extends KeyItem {
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> list, @NotNull TooltipFlag tooltipFlag) {
         list.add(Component.translatable("item.key.keyring.desc"));
-        ModUtils.getTag(stack).ifPresent(ctag -> {
+        ModUtils.getTag(stack).ifPresent(ctag ->
             ctag.getCompound("keys").getAllKeys().forEach(uuid -> {
                 CompoundTag tag = ctag.getCompound("keys").getCompound(uuid);
                 if (tag.contains("chest") && tag.contains("chestType")){
@@ -79,8 +79,8 @@ public class KeyRingItem extends KeyItem {
                         list.add(Component.translatable("item.key.keychest", chestType, pos.getX(), pos.getY(), pos.getZ()));
                     }
                 }
-            });
-        });
+            })
+        );
         super.appendHoverText(stack, level, list, tooltipFlag);
     }
 }

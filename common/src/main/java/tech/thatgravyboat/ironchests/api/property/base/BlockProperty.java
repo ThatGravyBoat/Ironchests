@@ -2,9 +2,9 @@ package tech.thatgravyboat.ironchests.api.property.base;
 
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
-public interface IBlockProperty {
+public interface BlockProperty {
 
     BlockBehaviour.Properties getProperties();
 
-    IBlockPropertyType getType();
+    BlockPropertyType getType();
 }
