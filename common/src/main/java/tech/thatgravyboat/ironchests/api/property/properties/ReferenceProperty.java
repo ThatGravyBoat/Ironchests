@@ -3,6 +3,7 @@ package tech.thatgravyboat.ironchests.api.property.properties;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import tech.thatgravyboat.ironchests.api.property.base.BlockProperty;
@@ -25,7 +26,7 @@ public record ReferenceProperty(Block block) implements BlockProperty {
     private static class Type implements BlockPropertyType {
 
         private static final Codec<ReferenceProperty> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Registry.BLOCK.byNameCodec().fieldOf("block").forGetter(ReferenceProperty::block)
+            BuiltInRegistries.BLOCK.byNameCodec().fieldOf("block").forGetter(ReferenceProperty::block)
         ).apply(instance, ReferenceProperty::new));
 
         @Override

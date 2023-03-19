@@ -31,6 +31,6 @@ public class ShapeTypes {
     private static DataResult<? extends ShapeType<?>> decode(String id) {
         return Optional.ofNullable(TYPE_MAP.get(id))
                 .map(DataResult::success)
-                .orElse(DataResult.error("No shape type found. " + id));
+                .orElse(DataResult.error(() -> "No shape type found. " + id));
     }
 }

@@ -2,14 +2,13 @@ package tech.thatgravyboat.ironchests.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -17,6 +16,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
@@ -55,13 +55,13 @@ public class ChestRenderer<T extends GenericChestBlockEntity> implements BlockEn
 
         RenderSystem.enableDepthTest();
         poseStack.translate(0.5D, 1D, 0.5D);
-        poseStack.mulPose(Vector3f.YP.rotationDegrees(-chest.getBlockState().getValue(GenericChestBlock.getFacingProperty(type)).toYRot()));
+        poseStack.mulPose(Axis.YP.rotationDegrees(-chest.getBlockState().getValue(GenericChestBlock.getFacingProperty(type)).toYRot()));
         poseStack.translate(-0.5D, -1D, -0.5D);
 
         poseStack.pushPose();
         //Pivot
         poseStack.translate(0, 0.63, 0.065);
-        poseStack.mulPose(Vector3f.XP.rotationDegrees(-chest.getOpenness(f)));
+        poseStack.mulPose(Axis.XP.rotationDegrees(-chest.getOpenness(f)));
         poseStack.translate(0, -0.63, -0.065);
         if (type.blockType() == ChestBlockType.CHEST) {
             RenderType renderType = type.transparent() ? Sheets.translucentCullBlockSheet() : Sheets.cutoutBlockSheet();
@@ -135,8 +135,8 @@ public class ChestRenderer<T extends GenericChestBlockEntity> implements BlockEn
         matrices.pushPose();
         matrices.translate(x, y, z);
         matrices.scale(0.5f, 0.5f, 0.5f);
-        matrices.mulPose(Vector3f.YP.rotationDegrees(rotation));
-        renderer.renderStatic(stack, ItemTransforms.TransformType.GROUND, light, OverlayTexture.NO_OVERLAY, matrices, vertexConsumers, 0);
+        matrices.mulPose(Axis.YP.rotationDegrees(rotation));
+        renderer.renderStatic(stack, ItemDisplayContext.GROUND, light, OverlayTexture.NO_OVERLAY, matrices, vertexConsumers, Minecraft.getInstance().level, 0);
         matrices.popPose();
     }
 }

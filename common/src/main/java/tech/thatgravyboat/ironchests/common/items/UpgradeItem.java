@@ -3,6 +3,7 @@ package tech.thatgravyboat.ironchests.common.items;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -23,7 +24,7 @@ import tech.thatgravyboat.ironchests.api.chesttype.ChestUpgradeType;
 
 public class UpgradeItem extends Item {
 
-    public static final TagKey<Block> REPLACEABLE_CHEST_TAG = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(IronChests.MODID, "upgradeable_wooden_chests"));
+    public static final TagKey<Block> REPLACEABLE_CHEST_TAG = TagKey.create(Registries.BLOCK, new ResourceLocation(IronChests.MODID, "upgradeable_wooden_chests"));
 
     public final ChestUpgradeType type;
 

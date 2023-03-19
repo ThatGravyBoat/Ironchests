@@ -24,7 +24,7 @@ public class Properties {
     }
 
     private static DataResult<BlockPropertyType> decode(String id) {
-        return Optional.ofNullable(PROPERTY_MAP.get(id)).map(DataResult::success).orElse(DataResult.error("No property type found."));
+        return Optional.ofNullable(PROPERTY_MAP.get(id)).map(DataResult::success).orElse(DataResult.error(() -> "No property type found."));
     }
 
 }

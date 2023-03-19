@@ -27,8 +27,8 @@ public class ChestTypeLoader {
         setupDefaultFiles("/data/ironchests/chests", ModPaths.CHESTS, "chests");
         setupDefaultFiles("/data/ironchests/barrels", ModPaths.BARRELS, "barrels");
         setupDefaultFiles("/data/ironchests/upgrade_types", ModPaths.UPGRADE_TYPES, "chest_upgrades");
-        FileUtils.streamFilesAndParse(ModPaths.CHESTS, ChestTypeLoader::parseChest);
-        FileUtils.streamFilesAndParse(ModPaths.UPGRADE_TYPES, ChestTypeLoader::parseChestUpgrade);
+        FileUtils.streamFilesAndParse(ModPaths.CHESTS, ChestTypeLoader::parseChest, FileUtils::isJson);
+        FileUtils.streamFilesAndParse(ModPaths.UPGRADE_TYPES, ChestTypeLoader::parseChestUpgrade, FileUtils::isJson);
         runChestChecks();
         LoaderConfig.save();
     }
@@ -71,7 +71,7 @@ public class ChestTypeLoader {
         }
 
         for (Path modRoot : roots) {
-            FileUtils.copyDefaultFiles(dataPath, targetPath, modRoot);
+            FileUtils.copyDefaultFiles(dataPath, targetPath, modRoot, FileUtils::isJson);
         }
     }
 }

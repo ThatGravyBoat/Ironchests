@@ -6,6 +6,8 @@ import tech.thatgravyboat.ironchests.common.registry.minecraft.BlockRegistry;
 import tech.thatgravyboat.ironchests.common.registry.minecraft.ItemRegistry;
 import tech.thatgravyboat.ironchests.common.registry.minecraft.MenuRegistry;
 
+import java.util.Map;
+
 public class IronChests {
 
     public static final String MODID = "ironchests";

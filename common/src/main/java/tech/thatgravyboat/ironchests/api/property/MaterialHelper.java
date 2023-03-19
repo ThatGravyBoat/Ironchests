@@ -58,6 +58,6 @@ public class MaterialHelper {
             case "powder_snow" -> Material.POWDER_SNOW;
             default -> null;
         };
-        return material == null ? DataResult.error("Material not found") : DataResult.success(material);
+        return material == null ? DataResult.error(() -> "Material not found") : DataResult.success(material);
     }
 }

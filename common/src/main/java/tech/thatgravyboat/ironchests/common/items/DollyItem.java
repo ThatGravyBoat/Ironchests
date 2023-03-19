@@ -1,7 +1,7 @@
 package tech.thatgravyboat.ironchests.common.items;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
@@ -21,7 +21,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,7 +35,7 @@ import java.util.List;
 
 public class DollyItem extends Item {
 
-    public static final TagKey<Block> NONPICKABLE_CHEST_TAG = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(IronChests.MODID, "non_pickable_chests"));
+    public static final TagKey<Block> NONPICKABLE_CHEST_TAG = TagKey.create(Registries.BLOCK, new ResourceLocation(IronChests.MODID, "non_pickable_chests"));
 
     public DollyItem(Properties properties) {
         super(properties);
@@ -60,7 +59,7 @@ public class DollyItem extends Item {
             BlockPlaceContext blockPlaceContext = new BlockPlaceContext(context);
             if (!blockPlaceContext.canPlace()) return InteractionResult.PASS;
             //noinspection ConstantConditions
-            BlockState tagState = updateBlockState(blockPlaceContext, NbtUtils.readBlockState(stack.getTag().getCompound("BlockStateTag")));
+            BlockState tagState = updateBlockState(blockPlaceContext, NbtUtils.readBlockState(level.holderLookup(Registries.BLOCK), stack.getTag().getCompound("BlockStateTag")));
             level.setBlock(blockPlaceContext.getClickedPos(), tagState, 11);
             loadBlockEntityTag(level.getBlockEntity(blockPlaceContext.getClickedPos()), stack.getTag().getCompound("BlockEntityTag"));
             stack.getTag().remove("BlockStateTag");

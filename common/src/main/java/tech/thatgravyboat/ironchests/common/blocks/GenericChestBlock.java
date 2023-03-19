@@ -13,6 +13,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -188,7 +189,7 @@ public class GenericChestBlock extends BaseEntityBlock implements SimpleWaterlog
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource randomSource) {
+    public void randomTick(@NotNull BlockState state, ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource random) {
         if (level.random.nextFloat() > 0.05f) return;
         if (level.getBlockEntity(pos) instanceof GenericChestBlockEntity chest) {
             ChestType newChest = chest.getChestType().getOxidizedChest();
@@ -205,5 +206,17 @@ public class GenericChestBlock extends BaseEntityBlock implements SimpleWaterlog
 
     public static Property<Direction> getFacingProperty(ChestType type) {
         return type.blockType() == ChestBlockType.BARREL ? BlockStateProperties.FACING : BlockStateProperties.HORIZONTAL_FACING;
+    }
+
+    @Override
+    public boolean hasAnalogOutputSignal(@NotNull BlockState state) {
+        return true;
+    }
+
+    public int getAnalogOutputSignal(@NotNull BlockState state, Level level, @NotNull BlockPos pos) {
+        if (level.getBlockEntity(pos) instanceof GenericChestBlockEntity chest){
+            return AbstractContainerMenu.getRedstoneSignalFromContainer(chest);
+        }
+        return 0;
     }
 }
