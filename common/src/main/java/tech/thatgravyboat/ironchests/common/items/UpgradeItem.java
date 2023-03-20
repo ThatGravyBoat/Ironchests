@@ -43,12 +43,14 @@ public class UpgradeItem extends Item {
 
         if (blockEntity instanceof GenericChestBlockEntity chestEntity){
 
+            if (chestEntity.getChestType() != type.from()) return InteractionResult.PASS;
             if (!chestEntity.canOpen(context.getPlayer())) return InteractionResult.PASS;
 
-            UpgradeItem.changeToChest(level, pos, chestEntity, type.to());
+            if (level.isClientSide) return InteractionResult.SUCCESS;
+            if (!UpgradeItem.changeToChest(level, pos, chestEntity, type.to())) return InteractionResult.PASS;
             context.getItemInHand().shrink(1);
 
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.CONSUME;
         }
 
         BlockState state = level.getBlockState(pos);
@@ -87,16 +89,15 @@ public class UpgradeItem extends Item {
         return InteractionResult.PASS;
     }
 
-    public static void changeToChest(Level level, BlockPos pos, GenericChestBlockEntity chest, ChestType to) {
-        if (chest.viewers() > 0) return;
-        if (level.isClientSide) return;
+    public static boolean changeToChest(Level level, BlockPos pos, GenericChestBlockEntity chest, ChestType to) {
+        if (chest.viewers() > 0) return false;
 
         NonNullList<ItemStack> contents = chest.getItems();
         BlockState blockState = to.registries().getBlock().get().withPropertiesOf(level.getBlockState(pos));
         GenericChestBlockEntity chestBlockEntity = to.registries().getBlockEntity().get().create(pos, blockState);
         Component displayName = chest.getCustomName();
 
-        if (chestBlockEntity == null) return;
+        if (chestBlockEntity == null) return false;
 
         level.removeBlockEntity(pos);
         level.removeBlock(pos, false);
@@ -106,5 +107,6 @@ public class UpgradeItem extends Item {
 
         if (displayName != null) chestBlockEntity.setCustomName(displayName);
         chestBlockEntity.setItems(contents);
+        return true;
     }
 }

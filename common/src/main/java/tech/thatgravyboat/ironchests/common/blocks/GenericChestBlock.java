@@ -169,7 +169,7 @@ public class GenericChestBlock extends BaseEntityBlock implements SimpleWaterlog
         if (level.random.nextFloat() > 0.05f) return;
         if (level.getBlockEntity(pos) instanceof GenericChestBlockEntity chest) {
             ChestType newChest = chest.getChestType().getOxidizedChest();
-            if (newChest != null){
+            if (newChest != null && !level.isClientSide){
                 UpgradeItem.changeToChest(level, pos, chest, newChest);
             }
         }
