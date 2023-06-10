@@ -2,7 +2,7 @@ package tech.thatgravyboat.ironchests.forge;
 
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -19,11 +19,11 @@ public class IronChestsForge {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(IronChestsForge::onAddCreativeContents);
     }
 
-    public static void onAddCreativeContents(CreativeModeTabEvent.BuildContents event) {
-        if (event.getTab() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
+    public static void onAddCreativeContents(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             ItemRegistry.CHESTS.boundStream().forEach(event::accept);
         }
-        if (event.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(ItemRegistry.IRON_DOLLY.get());
             event.accept(ItemRegistry.DIAMOND_DOLLY.get());
             event.accept(ItemRegistry.BLANK_UPGRADE.get());

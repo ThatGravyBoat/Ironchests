@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[45,)"
+loaderVersion="[46,)"
 license="All rights reserved"
 
 [[mods]]
@@ -12,13 +12,13 @@ license="All rights reserved"
 [[dependencies.ironchests]]
     modId="forge"
     mandatory=true
-    versionRange="[45,)"
+    versionRange="[46,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.ironchests]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.4,)"
+    versionRange="[1.20,)"
     ordering="NONE"
     side="BOTH"

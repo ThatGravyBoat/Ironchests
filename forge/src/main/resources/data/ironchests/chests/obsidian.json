@@ -5,7 +5,6 @@
   "menuOffset": 8,
   "width": 232,
   "height": 222,
-  "texture": "diamond",
   "properties": {
     "type": "builder",
     "material": "metal",

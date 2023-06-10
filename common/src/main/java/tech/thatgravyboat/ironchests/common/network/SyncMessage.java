@@ -8,7 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import tech.thatgravyboat.ironchests.IronChests;
-import tech.thatgravyboat.ironchests.common.blocks.ISyncableData;
+import tech.thatgravyboat.ironchests.common.blocks.SyncableData;
 
 public record SyncMessage(BlockPos pos, CompoundTag tag) implements Packet<SyncMessage> {
 
@@ -42,7 +42,7 @@ public record SyncMessage(BlockPos pos, CompoundTag tag) implements Packet<SyncM
         public PacketContext handle(SyncMessage message) {
             return (player, level) -> {
                 if (player != null && level.isLoaded(message.pos)) {
-                    if (level.getBlockEntity(message.pos) instanceof ISyncableData syncableData) {
+                    if (level.getBlockEntity(message.pos) instanceof SyncableData syncableData) {
                         syncableData.loadSyncTag(message.tag);
                     }
                 }

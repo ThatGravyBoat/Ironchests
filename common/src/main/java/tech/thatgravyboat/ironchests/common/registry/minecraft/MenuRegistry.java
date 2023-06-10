@@ -3,7 +3,6 @@ package tech.thatgravyboat.ironchests.common.registry.minecraft;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -21,6 +20,8 @@ public class MenuRegistry {
 
     public static void init() {
         ChestTypeRegistry.INSTANCE.getChests().forEach(MenuRegistry::registerMenu);
+
+        MENUS.init();
     }
 
     private static void registerMenu(String id, ChestType type) {

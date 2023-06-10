@@ -10,7 +10,6 @@
     "All Other Textures - Kekie"
   ],
   "license": "All Rights Reserved",
-  "icon": "assets/ironchests/icon.png",
   
   "environment": "*",
   "entrypoints": {
@@ -25,7 +24,7 @@
   "depends": {
     "fabricloader": "*",
     "fabric": "*",
-    "minecraft": "1.19.4",
+    "minecraft": ">=1.20",
     "java": ">=17"
   }
 }

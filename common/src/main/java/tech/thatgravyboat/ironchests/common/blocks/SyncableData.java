@@ -7,10 +7,10 @@ import org.jetbrains.annotations.NotNull;
 import tech.thatgravyboat.ironchests.common.network.NetPacketHandler;
 import tech.thatgravyboat.ironchests.common.network.SyncMessage;
 
-public interface ISyncableData {
+public interface SyncableData {
 
     default void sync(@NotNull Level level, @NotNull BlockPos pos) {
-        if (level.isClientSide) return;
+        if (level.isClientSide()) return;
         NetPacketHandler.CHANNEL.sendToAllLoaded(new SyncMessage(pos, getSyncTag()), level, pos);
     }
 

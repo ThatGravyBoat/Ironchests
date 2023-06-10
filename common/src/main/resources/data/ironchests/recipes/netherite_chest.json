@@ -1,6 +1,7 @@
 {
-  "type": "minecraft:smithing",
-  "base": {
+  "type": "minecraft:smithing_transform",
+  "base": [],
+  "template": {
     "item": "ironchests:diamond_chest"
   },
   "addition": {

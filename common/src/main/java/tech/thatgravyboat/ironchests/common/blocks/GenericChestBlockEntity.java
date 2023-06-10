@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.ContainerHelper;
@@ -26,11 +25,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tech.thatgravyboat.ironchests.api.chesttype.ChestType;
 
-import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
-public class GenericChestBlockEntity extends BaseContainerBlockEntity implements ISyncableData, WorldlyContainer {
+public class GenericChestBlockEntity extends BaseContainerBlockEntity implements SyncableData, WorldlyContainer {
 
     private final int[] slots;
     private NonNullList<ItemStack> items;

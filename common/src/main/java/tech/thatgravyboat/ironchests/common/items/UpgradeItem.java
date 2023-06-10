@@ -2,7 +2,6 @@ package tech.thatgravyboat.ironchests.common.items;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -19,8 +18,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import tech.thatgravyboat.ironchests.IronChests;
 import tech.thatgravyboat.ironchests.api.chesttype.ChestType;
-import tech.thatgravyboat.ironchests.common.blocks.GenericChestBlockEntity;
 import tech.thatgravyboat.ironchests.api.chesttype.ChestUpgradeType;
+import tech.thatgravyboat.ironchests.common.blocks.GenericChestBlockEntity;
+
+import java.util.UUID;
 
 public class UpgradeItem extends Item {
 
@@ -96,6 +97,7 @@ public class UpgradeItem extends Item {
         BlockState blockState = to.registries().getBlock().get().withPropertiesOf(level.getBlockState(pos));
         GenericChestBlockEntity chestBlockEntity = to.registries().getBlockEntity().get().create(pos, blockState);
         Component displayName = chest.getCustomName();
+        UUID key = chest.getKeyId();
 
         if (chestBlockEntity == null) return;
 
@@ -106,6 +108,7 @@ public class UpgradeItem extends Item {
         level.setBlockEntity(chestBlockEntity);
 
         if (displayName != null) chestBlockEntity.setCustomName(displayName);
+        if (key != null) chestBlockEntity.setLockId(key);
         chestBlockEntity.setItems(contents);
     }
 }
