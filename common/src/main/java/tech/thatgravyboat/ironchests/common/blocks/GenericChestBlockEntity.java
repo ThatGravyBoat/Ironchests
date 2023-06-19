@@ -17,9 +17,9 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +28,7 @@ import tech.thatgravyboat.ironchests.api.chesttype.ChestType;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
-public class GenericChestBlockEntity extends BaseContainerBlockEntity implements SyncableData, WorldlyContainer {
+public class GenericChestBlockEntity extends RandomizableContainerBlockEntity implements SyncableData, WorldlyContainer {
 
     private final int[] slots;
     private NonNullList<ItemStack> items;
@@ -90,15 +90,6 @@ public class GenericChestBlockEntity extends BaseContainerBlockEntity implements
         return new GenericChestMenu(menuType, i, inventory, this, type);
     }
 
-    @Override
-    public boolean stillValid(@NotNull Player player) {
-        if (this.level == null || this.level.getBlockEntity(this.worldPosition) != this) {
-            return false;
-        } else {
-            return player.distanceToSqr(this.worldPosition.getX() + 0.5D, this.worldPosition.getY() + 0.5D, this.worldPosition.getZ() + 0.5D) <= 64.0D;
-        }
-    }
-
     //endregion
 
     //region Item Stuff
@@ -109,41 +100,11 @@ public class GenericChestBlockEntity extends BaseContainerBlockEntity implements
     }
 
     @Override
-    public boolean isEmpty() {
-        return items.stream().allMatch(ItemStack::isEmpty);
-    }
-
-    @Override
-    public @NotNull ItemStack getItem(int i) {
-        return items.get(i);
-    }
-
-    public NonNullList<ItemStack> getItems() {
+    public @NotNull NonNullList<ItemStack> getItems() {
         return items;
     }
 
     @Override
-    public @NotNull ItemStack removeItem(int i, int j) {
-        ItemStack itemStack = ContainerHelper.removeItem(items, i, j);
-        if (!itemStack.isEmpty()) this.setChanged();
-        return itemStack;
-    }
-
-    @Override
-    public @NotNull ItemStack removeItemNoUpdate(int i) {
-        return ContainerHelper.takeItem(items, i);
-    }
-
-    @Override
-    public void setItem(int i, @NotNull ItemStack itemStack) {
-        items.set(i, itemStack);
-        if (itemStack.getCount() > this.getMaxStackSize()) {
-            itemStack.setCount(this.getMaxStackSize());
-        }
-
-        this.setChanged();
-    }
-
     public void setItems(NonNullList<ItemStack> items){
         if (items.size() == this.getContainerSize()) this.items = items;
         else {
@@ -151,11 +112,6 @@ public class GenericChestBlockEntity extends BaseContainerBlockEntity implements
             for (int i = 0; i < items.size(); i++) this.items.set(i, items.get(i));
         }
         this.setChanged();
-    }
-
-    @Override
-    public void clearContent() {
-        items.clear();
     }
 
     @Override
