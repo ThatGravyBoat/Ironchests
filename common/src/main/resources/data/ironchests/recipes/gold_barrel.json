@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#C#",
+    "###"
+  ],
+  "key": {
+    "#": {"item": "minecraft:gold_ingot"},
+    "C": {"item": "ironchests:iron_barrel"}
+  },
+  "result": {
+    "item": "ironchests:gold_barrel"
+  }
+}
