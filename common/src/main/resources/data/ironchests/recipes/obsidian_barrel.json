@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#C#",
+    "###"
+  ],
+  "key": {
+    "#": {"item": "minecraft:obsidian"},
+    "C": {"item": "ironchests:diamond_barrel"}
+  },
+  "result": {
+    "item": "ironchests:obsidian_barrel"
+  }
+}
