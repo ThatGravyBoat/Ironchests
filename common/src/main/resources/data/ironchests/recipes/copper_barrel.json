@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#C#",
+    "###"
+  ],
+  "key": {
+    "#": {"item": "minecraft:copper_ingot"},
+    "C": {"item": "minecraft:barrel"}
+  },
+  "result": {
+    "item": "ironchests:copper_barrel"
+  }
+}
