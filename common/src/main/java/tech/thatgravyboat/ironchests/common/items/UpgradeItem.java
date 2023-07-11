@@ -46,6 +46,7 @@ public class UpgradeItem extends Item {
         if (blockEntity instanceof GenericChestBlockEntity chestEntity){
 
             if (!chestEntity.canOpen(context.getPlayer())) return InteractionResult.PASS;
+            if(!chestEntity.getChestType().equals(type.from())) return InteractionResult.PASS;
 
             UpgradeItem.changeToChest(level, pos, chestEntity, type.to());
             context.getItemInHand().shrink(1);
