@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GGG",
+    "#B#",
+    "GGG"
+  ],
+  "key": {
+    "#": {"item": "minecraft:diamond"},
+    "G": {"item": "minecraft:gold_ingot"},
+    "B": {"item": "ironchests:gold_barrel"}
+  },
+  "result": {
+    "item": "ironchests:diamond_barrel"
+  }
+}
