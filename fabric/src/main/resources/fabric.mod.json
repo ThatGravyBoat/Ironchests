@@ -10,7 +10,6 @@
     "All Other Textures - Kekie"
   ],
   "license": "All Rights Reserved",
-  "icon": "assets/ironchests/icon.png",
   
   "environment": "*",
   "entrypoints": {

@@ -20,6 +20,7 @@ public class MenuRegistry {
 
     public static void init() {
         ChestTypeRegistry.INSTANCE.getChests().forEach(MenuRegistry::registerMenu);
+        MENUS.init();
     }
 
     private static void registerMenu(String id, ChestType type) {
