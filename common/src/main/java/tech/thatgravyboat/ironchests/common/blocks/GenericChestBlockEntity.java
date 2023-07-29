@@ -53,19 +53,17 @@ public class GenericChestBlockEntity extends RandomizableContainerBlockEntity im
             protected void onOpen(@NotNull Level level, @NotNull BlockPos blockPos, @NotNull BlockState blockState) {
                 sync(level, blockPos);
                 level.playSound(null, blockPos.getX() + 0.5D, blockPos.getY() + 0.5D, blockPos.getZ() + 0.5D, type.blockType().getOpenSound(), SoundSource.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
+                level.setBlock(blockPos, blockState.setValue(GenericChestBlock.OPEN, true), Block.UPDATE_ALL);
             }
 
             @Override
             protected void onClose(@NotNull Level level, @NotNull BlockPos blockPos, @NotNull BlockState blockState) {
                 level.playSound(null, blockPos.getX() + 0.5D, blockPos.getY() + 0.5D, blockPos.getZ() + 0.5D, type.blockType().getCloseSound(), SoundSource.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
+                level.setBlock(blockPos, blockState.setValue(GenericChestBlock.OPEN, false), Block.UPDATE_ALL);
             }
 
             @Override
-            protected void openerCountChanged(@NotNull Level level, @NotNull BlockPos blockPos, @NotNull BlockState blockState, int i, int j) {
-                if (blockState.hasProperty(GenericChestBlock.OPEN)) {
-                    level.setBlock(blockPos, blockState.setValue(GenericChestBlock.OPEN, j > 0), Block.UPDATE_ALL);
-                }
-            }
+            protected void openerCountChanged(@NotNull Level level, BlockPos blockPos, @NotNull BlockState blockState, int i, int j) {}
 
             @Override
             protected boolean isOwnContainer(@NotNull Player player) {
@@ -147,14 +145,16 @@ public class GenericChestBlockEntity extends RandomizableContainerBlockEntity im
 
     @Override
     public void startOpen(@NotNull Player player) {
-        if (this.level != null)
+        if (this.level != null && !this.remove && !player.isSpectator()) {
             this.openersCounter.incrementOpeners(player, this.level, this.getBlockPos(), this.getBlockState());
+        }
     }
 
     @Override
     public void stopOpen(@NotNull Player player) {
-        if (this.level != null)
+        if (this.level != null && !this.remove && !player.isSpectator()) {
             this.openersCounter.decrementOpeners(player, this.level, this.getBlockPos(), this.getBlockState());
+        }
     }
 
     public float getOpenness(float partialTicks){
