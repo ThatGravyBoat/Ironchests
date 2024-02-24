@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "#ironchests:chests"
+    "#ironchests:chests",
+    "#ironchests:barrels"
   ]
 }
